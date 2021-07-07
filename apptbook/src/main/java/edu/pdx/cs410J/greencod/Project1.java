@@ -21,6 +21,79 @@ public class Project1 {
   public static final String MISSING_BEGIN_TIME = "Missing begin time";
   public static final String MISSING_END_DATE = "Missing end date";
   public static final String MISSING_END_TIME = "Missing end time";
+  public static final String TIME_NOT_CORRECT = "Incorrect Time: please use military time in format HH:MM";
+  public static final String DATE_NOT_CORRECT = "Incorrect date: Please use mm/dd/yyyy";
+
+  public static String validateTime(String old) {
+    String[] ar = old.split(":");
+    if(ar.length != 2) {
+      System.err.println(TIME_NOT_CORRECT);
+      System.exit(1);
+    }
+
+    final int hour = Integer.parseInt(ar[0]);
+    final int minute = Integer.parseInt(ar[1]);
+    if(hour < 0 || hour > 23 || minute < 0 || minute > 59){
+      System.err.println(TIME_NOT_CORRECT);
+      System.exit(1);
+    }
+    return old;
+  }
+  public static String validateDate(String old) {
+    String[] ar = old.split("/");
+    if(ar.length != 3){
+      System.err.println(DATE_NOT_CORRECT);
+      System.exit(1);
+    }
+    if(ar[0].length() > 2 || ar[1].length() > 2 || ar[2].length() != 4) {
+      System.err.println(DATE_NOT_CORRECT);
+      System.exit(1);
+    }
+    final int month = Integer.parseInt(ar[0]);
+    final int day = Integer.parseInt(ar[1]);
+    final int year = Integer.parseInt(ar[2]);
+
+    boolean leap = false;
+
+    if(month < 0 || month > 12) {
+      System.err.println(DATE_NOT_CORRECT);
+      System.exit(1);
+    }
+    if(month == 2) {
+      if(year % 4 == 0) {
+        if(year % 100 == 0) {
+          if(year % 400 == 0) {
+            leap = true;
+          }
+        } else {
+          leap = true;
+        }
+      }
+      if(!leap) {
+        if(day < 0 || day > 28) {
+          System.err.println(DATE_NOT_CORRECT);
+          System.exit(1);
+        }
+      } else {
+        if(day < 0 || day > 29) {
+          System.err.println(DATE_NOT_CORRECT);
+          System.exit(1);
+        }
+      }
+    } else if((month < 8 && month % 2 == 1) || (month > 7 && month % 2 == 0)) {
+      if(day < 0 || day > 31) {
+        System.err.println(DATE_NOT_CORRECT);
+        System.exit(1);
+      }
+    } else {
+      if(day < 0 || day > 30) {
+        System.err.println(DATE_NOT_CORRECT);
+        System.exit(1);
+      }
+    }
+
+    return old;
+  }
 
   public static void main(String[] args) {
     String owner = null;
@@ -36,13 +109,13 @@ public class Project1 {
       } else if(description == null) {
         description = arg;
       } else if(beginDate == null) {
-        beginDate = arg;
+        beginDate = validateDate(arg);
       } else if(beginTime == null) {
-        beginTime = arg;
+        beginTime = validateTime(arg);
       } else if(endDate == null) {
         endDate = arg;
       } else if(endTime == null) {
-        endTime = arg;
+        endTime = validateTime(arg);
       }
     }
 
