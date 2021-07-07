@@ -14,6 +14,8 @@ import static org.hamcrest.core.StringContains.containsString;
  */
 class StudentIT extends InvokeMainTestCase {
 
+
+
   @Test
   void invokingMainWithNoArgumentsHasExitCodeOf1() {
     InvokeMainTestCase.MainMethodResult result = invokeMain(Student.class);
@@ -23,7 +25,22 @@ class StudentIT extends InvokeMainTestCase {
   @Test
   void invokingMainWithNoArgumentsPrintsMissingArgumentsToStandardError() {
     InvokeMainTestCase.MainMethodResult result = invokeMain(Student.class);
-    assertThat(result.getTextWrittenToStandardError(), containsString("Missing command line arguments"));
+    assertThat(result.getTextWrittenToStandardError(), containsString(Student.MISSING_COMMAND_LINE_ARGUMENTS));
+    assertThat(result.getTextWrittenToStandardError(), containsString(Student.USAGE_MESSAGE));
+  }
+
+  @Test
+  void missingGender() {
+    InvokeMainTestCase.MainMethodResult result = invokeMain(Student.class, "Dave");
+    assertThat(result.getTextWrittenToStandardError(), containsString(Student.MISSING_GENDER));
+    assertThat(result.getExitCode(), equalTo(1));
+  }
+
+  @Test
+  void unrecognizeGender() {
+    MainMethodResult result = invokeMain(Student.class, "Dave", "3.45");
+    assertThat(result.getTextWrittenToStandardError(), containsString("Unrecognized Gender: \"3.45\""));
+    assertThat(result.getExitCode(), equalTo(1));
   }
 
 }

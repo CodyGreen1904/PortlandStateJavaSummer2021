@@ -12,12 +12,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 class Project1IT extends InvokeMainTestCase {
 
+
+
+
   /**
    * Invokes the main method of {@link Project1} with the given arguments.
    */
   private MainMethodResult invokeMain(String... args) {
     return invokeMain( Project1.class, args );
   }
+
 
   /**
    * Tests that invoking the main method with no arguments issues an error
@@ -26,7 +30,20 @@ class Project1IT extends InvokeMainTestCase {
   void testNoCommandLineArguments() {
     MainMethodResult result = invokeMain();
     assertThat(result.getExitCode(), equalTo(1));
-    assertThat(result.getTextWrittenToStandardError(), containsString("Missing command line arguments"));
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.MISSING_COMMAND_LINE_ARGUMENTS));
   }
+  @Test
+  void testNoCommandArgsPrintsMissingArgs(){
+    MainMethodResult result = invokeMain();
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.MISSING_COMMAND_LINE_ARGUMENTS));
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.USAGE_MESSAGE));
+  }
+
+  @Test
+  void testMissingDescription() {
+    MainMethodResult result = invokeMain(Appointment.class, "Cody");
+    assertThat(result.getTextWrittenToStandardError(), containsString("Missing"));
+  }
+
 
 }
