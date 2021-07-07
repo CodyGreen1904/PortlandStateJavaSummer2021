@@ -37,12 +37,21 @@ class Project1IT extends InvokeMainTestCase {
     MainMethodResult result = invokeMain();
     assertThat(result.getTextWrittenToStandardError(), containsString(Project1.MISSING_COMMAND_LINE_ARGUMENTS));
     assertThat(result.getTextWrittenToStandardError(), containsString(Project1.USAGE_MESSAGE));
+    assertThat(result.getExitCode(), equalTo(1));
   }
 
   @Test
   void testMissingDescription() {
-    MainMethodResult result = invokeMain(Appointment.class, "Cody");
-    assertThat(result.getTextWrittenToStandardError(), containsString("Missing"));
+    MainMethodResult result = invokeMain(Project1.class, "Cody");
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.MISSING_DESCRIPTION));
+    assertThat(result.getExitCode(), equalTo(1));
+  }
+
+  @Test
+  void testMissingBeginDate() {
+    MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation");
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.MISSING_BEGIN_DATE));
+    assertThat(result.getExitCode(), equalTo(1));
   }
 
 
