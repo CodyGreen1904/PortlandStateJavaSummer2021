@@ -13,8 +13,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 class Project1IT extends InvokeMainTestCase {
 
 
-
-
   /**
    * Invokes the main method of {@link Project1} with the given arguments.
    */
@@ -51,6 +49,27 @@ class Project1IT extends InvokeMainTestCase {
   void testMissingBeginDate() {
     MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation");
     assertThat(result.getTextWrittenToStandardError(), containsString(Project1.MISSING_BEGIN_DATE));
+    assertThat(result.getExitCode(), equalTo(1));
+  }
+
+  @Test
+  void testMissingBeginTime() {
+    MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation", "07/21/3000");
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.MISSING_BEGIN_TIME));
+    assertThat(result.getExitCode(), equalTo(1));
+  }
+
+  @Test
+  void testMissingEndDate() {
+    MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation","07/21/3000", "11:11");
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.MISSING_END_DATE));
+    assertThat(result.getExitCode(), equalTo(1));
+  }
+
+  @Test
+  void testMissingEndTime() {
+    MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation","07/21/3000", "11:11", "07/21/1992");
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.MISSING_END_TIME));
     assertThat(result.getExitCode(), equalTo(1));
   }
 

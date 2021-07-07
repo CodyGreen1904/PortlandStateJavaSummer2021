@@ -18,6 +18,9 @@ public class Project1 {
           "Date and time should be in the format: mm/dd/yyyy hh:mm";
   public static final String MISSING_DESCRIPTION = "Missing Description";
   public static final String MISSING_BEGIN_DATE = "Missing begin date";
+  public static final String MISSING_BEGIN_TIME = "Missing begin time";
+  public static final String MISSING_END_DATE = "Missing end date";
+  public static final String MISSING_END_TIME = "Missing end time";
 
   public static void main(String[] args) {
     String owner = null;
@@ -34,6 +37,12 @@ public class Project1 {
         description = arg;
       } else if(beginDate == null) {
         beginDate = arg;
+      } else if(beginTime == null) {
+        beginTime = arg;
+      } else if(endDate == null) {
+        endDate = arg;
+      } else if(endTime == null) {
+        endTime = arg;
       }
     }
 
@@ -48,6 +57,15 @@ public class Project1 {
       System.exit(1);
     } else if(beginDate == null) {
       System.err.println(MISSING_BEGIN_DATE);
+      System.exit(1);
+    } else if(beginTime == null) {
+      System.err.println(MISSING_BEGIN_TIME);
+      System.exit(1);
+    } else if(endDate == null) {
+      System.err.println(MISSING_END_DATE);
+      System.exit(1);
+    } else if(endTime == null) {
+      System.err.println(MISSING_END_TIME);
       System.exit(1);
     }
 
