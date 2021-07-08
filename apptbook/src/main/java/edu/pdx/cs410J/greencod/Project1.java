@@ -102,8 +102,13 @@ public class Project1 {
     String beginTime = null;
     String endDate = null;
     String endTime = null;
+    boolean flag = false;
 
     for(String arg : args) {
+      if(arg == "-print") {
+        flag = true;
+        continue;
+      }
       if(owner == null) {
         owner = arg;
       } else if(description == null) {
@@ -113,9 +118,13 @@ public class Project1 {
       } else if(beginTime == null) {
         beginTime = validateTime(arg);
       } else if(endDate == null) {
-        endDate = arg;
+        endDate = validateDate(arg);
       } else if(endTime == null) {
         endTime = validateTime(arg);
+      } else {
+        System.err.println("Too many command line arguments");
+        System.err.println(USAGE_MESSAGE);
+        System.exit(1);
       }
     }
 

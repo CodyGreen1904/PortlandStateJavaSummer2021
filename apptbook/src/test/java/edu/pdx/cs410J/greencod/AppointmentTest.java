@@ -31,4 +31,30 @@ public class AppointmentTest {
     assertThat(appointment.getBeginTime(), is(nullValue()));
   }
 
+  @Test
+  void doesGetBeginTimeStringWork() {
+    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
+    assertThat(appointment.getBeginTimeString(), containsString("07/21/1992 11:11"));
+  }
+
+  @Test
+  void doesGetEndTimeStringWork() {
+    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
+    assertThat(appointment.getEndTimeString(), containsString("07/21/1992 11:15"));
+  }
+
+  @Test
+  void doesGetDescriptionWork() {
+    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
+    assertThat(appointment.getDescription(), containsString("Haircut"));
+  }
+
+  @Test
+  void doesToStringWork() {
+    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
+    assertThat(appointment.toString(), containsString("Haircut from 07/21/1992 11:11 until 07/21/1992 11:15"));
+  }
+
+
+
 }
