@@ -1,1 +1,1 @@
-This is a README file!
+This is a README file for Project 1! This program reads in arguments to create an appointment, then adds those appointments to an appointment book class that will be updated in later projects.

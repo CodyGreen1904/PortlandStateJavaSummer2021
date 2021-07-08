@@ -1,5 +1,10 @@
 package edu.pdx.cs410J.greencod;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
 /**
  * The main class for the CS410J appointment book Project
  */
@@ -24,6 +29,27 @@ public class Project1 {
   public static final String TIME_NOT_CORRECT = "Incorrect Time: please use military time in format HH:MM";
   public static final String DATE_NOT_CORRECT = "Incorrect date: Please use mm/dd/yyyy";
 
+  /**
+   * Displays the README file and exits
+   */
+  public void readMe() throws IOException {
+    try (
+            InputStream readme = Project1.class.getResourceAsStream("README.txt")
+    ) {
+      BufferedReader reader = new BufferedReader(new InputStreamReader(readme));
+      String line = reader.readLine();
+      System.out.println(line);
+      System.out.println(USAGE_MESSAGE);
+    }
+    catch (IOException i) {
+      System.err.println("error getting readme");
+      System.exit(1);
+    }
+  }
+
+  /**
+   * Ensures the format of time is HH:MM
+   */
   public static String validateTime(String old) {
     String[] ar = old.split(":");
     if(ar.length != 2) {
@@ -39,6 +65,9 @@ public class Project1 {
     }
     return old;
   }
+  /**
+   * Ensures the format of date is mm/dd/yyyy
+   */
   public static String validateDate(String old) {
     String[] ar = old.split("/");
     if(ar.length != 3){
@@ -95,7 +124,15 @@ public class Project1 {
     return old;
   }
 
-  public static void main(String[] args) {
+  /**
+   * Main program that parses the command line, verifies input creates a
+   * <code>Project1</code>, creates an <code>Appointment</code>
+   * , an <code>AppointmentBook</code>, and adds the appointment to
+   * the appointment book. Also shows the README with
+   * <code>readMe()</code> and the -print with the <code>Apppointment</code>
+   * <code>toString</code> method.
+   */
+  public static void main(String[] args) throws IOException{
     String owner = null;
     String description = null;
     String beginDate = null;
@@ -104,12 +141,15 @@ public class Project1 {
     String endTime = null;
     boolean flag = false;
 
+    Project1 p = new Project1();
     for(String arg : args) {
-      if(arg == "-print") {
-        flag = true;
-        continue;
+      if(arg.equals("-README")) {
+        p.readMe();
+        System.exit(0);
       }
-      if(owner == null) {
+      if(arg.equals("-print")) {
+        flag = true;
+      } else if(owner == null) {
         owner = arg;
       } else if(description == null) {
         description = arg;
@@ -128,7 +168,6 @@ public class Project1 {
       }
     }
 
-    Appointment appointment = new Appointment();  // Refer to one of Dave's classes so that we can be sure it is on the classpath
 
     if(owner == null){
       System.err.println(MISSING_COMMAND_LINE_ARGUMENTS);
@@ -149,6 +188,14 @@ public class Project1 {
     } else if(endTime == null) {
       System.err.println(MISSING_END_TIME);
       System.exit(1);
+    }
+
+    Appointment appointment = new Appointment(owner, description, beginDate, beginTime, endDate, endTime);
+
+    AppointmentBook appointmentBook = new AppointmentBook(owner, appointment);
+
+    if (flag) {
+      System.out.println(appointment);
     }
 
     for (String arg : args) {

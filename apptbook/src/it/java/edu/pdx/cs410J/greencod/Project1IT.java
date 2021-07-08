@@ -130,10 +130,13 @@ class Project1IT extends InvokeMainTestCase {
     assertThat(result.getTextWrittenToStandardError(), containsString(Project1.DATE_NOT_CORRECT));
     assertThat(result.getExitCode(), equalTo(1));
   }
+  /**
+   * Tests that -print works
+   */
   @Test
   void testPrint() {
     MainMethodResult result = invokeMain(Project1.class, "-print", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "07/21/1992", "11:11");
-    assertThat(result.getTextWrittenToStandardError(), containsString(("")));
+    assertThat(result.getTextWrittenToStandardOut(), containsString(("Head Transplant Consultation from 12/31/3000 11:00 until 07/21/1992 11:11")));
   }
 
 }

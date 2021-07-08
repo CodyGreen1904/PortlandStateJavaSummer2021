@@ -25,7 +25,9 @@ class Project1Test {
       assertThat(readme, not(nullValue()));
       BufferedReader reader = new BufferedReader(new InputStreamReader(readme));
       String line = reader.readLine();
-      assertThat(line, containsString("This is a README file!"));
+      assertThat(line, containsString("This is a README file for Project 1! This program reads in arguments to create an appointment, then adds those appointments to an appointment book class that will be updated in later projects."));
     }
   }
+
+
 }
