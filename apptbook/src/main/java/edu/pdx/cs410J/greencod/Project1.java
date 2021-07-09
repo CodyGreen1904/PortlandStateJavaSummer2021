@@ -43,7 +43,7 @@ public class Project1 {
     }
     catch (IOException i) {
       System.err.println("error getting readme");
-      System.exit(1);
+      throw i;
     }
   }
 

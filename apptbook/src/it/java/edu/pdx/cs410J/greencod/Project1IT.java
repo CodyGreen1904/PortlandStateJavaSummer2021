@@ -138,5 +138,10 @@ class Project1IT extends InvokeMainTestCase {
     MainMethodResult result = invokeMain(Project1.class, "-print", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "07/21/1992", "11:11");
     assertThat(result.getTextWrittenToStandardOut(), containsString(("Head Transplant Consultation from 12/31/3000 11:00 until 07/21/1992 11:11")));
   }
+  @Test
+  void testReadMe() {
+    MainMethodResult result = invokeMain(Project1.class, "-README", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "07/21/1992", "11:11");
+    assertThat(result.getTextWrittenToStandardOut(), containsString(("This is a README file for Project 1! This program reads in arguments to create an appointment, then adds those appointments to an appointment book class that will be updated in later projects.")));
+  }
 
 }

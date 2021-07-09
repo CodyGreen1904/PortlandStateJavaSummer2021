@@ -62,7 +62,7 @@ public class Appointment extends AbstractAppointment {
     return endDate + " " + endTime;
   }
   /**
-   * Returns the <code>String</code> <code>description</code>>
+   * Returns the <code>String</code> <code>description</code>
    */
   @Override
   public String getDescription() {

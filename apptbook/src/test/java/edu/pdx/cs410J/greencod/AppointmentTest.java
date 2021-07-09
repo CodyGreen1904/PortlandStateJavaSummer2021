@@ -76,4 +76,21 @@ public class AppointmentTest {
     Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
     assertThat(appointment.toString(), containsString("Haircut from 07/21/1992 11:11 until 07/21/1992 11:15"));
   }
+
+  @Test
+  void doesOwnerNameWork() {
+    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
+    AppointmentBook appointmentBook = new AppointmentBook("Cody", appointment);
+    assertThat(appointmentBook.getOwnerName(), containsString("Cody"));
+  }
+  @Test
+  void doesAddAppointmentAndGetAppointmentWork() {
+    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
+    AppointmentBook appointmentBook = new AppointmentBook("Cody", appointment);
+    appointmentBook.addAppointment(appointment);
+    for(Appointment appnt : appointmentBook.getAppointments()) {
+      assertThat(appnt.toString(), containsString("Haircut from 07/21/1992 11:11 until 07/21/1992 11:15"));
+    }
+    assertThat(appointmentBook.getOwnerName(), containsString("Cody"));
+  }
 }
