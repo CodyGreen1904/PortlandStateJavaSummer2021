@@ -91,13 +91,13 @@ public class AboutCasting {
         Parent parent = (Child) child;
         // Think about the result. Did you expect that? Why?
         // How is that different from above?
-        assertEquals(parent.complain(), __);
+        assertEquals(parent.complain(), "Are we there yet!!");
     }
 
     @Koan
     public void classCasting() {
         try {
-            Object o = new Object();
+            Object o = new Grandparent();
             ((Sleepable) o).sleep(); // would this even compile without the cast?
         } catch (ClassCastException x) {
             fail("Object does not implement Sleepable, maybe one of the people classes do?");
@@ -108,7 +108,7 @@ public class AboutCasting {
     public void complicatedCast() {
         Grandparent parent = new Parent();
         // How can we access the parent's ability to "complain" - if the reference is held as a superclass?
-        assertEquals("TPS reports don't even have a cover letter!", __);
+        assertEquals("TPS reports don't even have a cover letter!", ((Parent) parent).complain());
     }
 
 }
