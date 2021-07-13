@@ -15,5 +15,6 @@ public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
     public void dump(AppointmentBook b) throws IOException {
         w.write(b.getOwnerName());
         w.flush();
+        w.flush();
     }
 }
