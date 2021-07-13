@@ -50,15 +50,25 @@ public class Project1 {
   /**
    * Ensures the format of time is HH:MM
    */
-  public static String validateTime(String old) {
+  public static String validateTime(String old) throws NumberFormatException{
     String[] ar = old.split(":");
     if(ar.length != 2) {
       System.err.println(TIME_NOT_CORRECT);
       System.exit(1);
     }
 
-    final int hour = Integer.parseInt(ar[0]);
-    final int minute = Integer.parseInt(ar[1]);
+    int hour = 0;
+    int minute = 0;
+    if(allNumsTime(ar)){
+      hour = Integer.parseInt(ar[0]);
+      minute = Integer.parseInt(ar[1]);
+    } else {
+      System.err.println(TIME_NOT_CORRECT);
+      System.exit(1);
+    }
+
+
+
     if(hour < 0 || hour > 23 || minute < 0 || minute > 59){
       System.err.println(TIME_NOT_CORRECT);
       System.exit(1);
@@ -66,9 +76,34 @@ public class Project1 {
     return old;
   }
   /**
+   * Checks for characters in time
+   */
+  public static boolean allNumsTime(String[] ar) throws NumberFormatException{
+    try {
+      int num = Integer.parseInt(ar[0]);
+      num = Integer.parseInt(ar[1]);
+    } catch (NumberFormatException e){
+      return false;
+    }
+    return true;
+  }
+  /**
+   * Checks for characters in date
+   */
+  public static boolean allNumsDate(String[] ar) throws NumberFormatException{
+    try {
+      int num = Integer.parseInt(ar[0]);
+      num = Integer.parseInt(ar[1]);
+      num = Integer.parseInt(ar[2]);
+    } catch (NumberFormatException e){
+      return false;
+    }
+    return true;
+  }
+  /**
    * Ensures the format of date is mm/dd/yyyy
    */
-  public static String validateDate(String old) {
+  public static String validateDate(String old) throws NumberFormatException{
     String[] ar = old.split("/");
     if(ar.length != 3){
       System.err.println(DATE_NOT_CORRECT);
@@ -78,9 +113,24 @@ public class Project1 {
       System.err.println(DATE_NOT_CORRECT);
       System.exit(1);
     }
-    final int month = Integer.parseInt(ar[0]);
-    final int day = Integer.parseInt(ar[1]);
-    final int year = Integer.parseInt(ar[2]);
+
+    int month = 0;
+    int day = 0;
+    int year = 0;
+
+    if(allNumsDate(ar)){
+      month = Integer.parseInt(ar[0]);
+      day = Integer.parseInt(ar[1]);
+      year = Integer.parseInt(ar[2]);
+    } else {
+      System.err.println(DATE_NOT_CORRECT);
+      System.exit(1);
+    }
+
+
+
+
+
 
     boolean leap = false;
 
@@ -132,7 +182,7 @@ public class Project1 {
    * <code>readMe()</code> and the -print with the <code>Apppointment</code>
    * <code>toString</code> method.
    */
-  public static void main(String[] args) throws IOException{
+  public static void main(String[] args) throws IOException, NumberFormatException{
     String owner = null;
     String description = null;
     String beginDate = null;

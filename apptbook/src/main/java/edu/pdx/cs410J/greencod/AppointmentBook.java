@@ -29,6 +29,10 @@ public class AppointmentBook extends AbstractAppointmentBook<Appointment>{
         this.addAppointment(appointment);
     }
 
+    public AppointmentBook(String owner){
+        this.owner = owner;
+    }
+
     /**
      * Returns the <code>String</code> with the name of
      *  the <code>owner</code>

@@ -99,7 +99,16 @@ class Project1IT extends InvokeMainTestCase {
    */
   @Test
   void testEndTimeInRange() {
-    MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation","07/21/3000", "11:45", "07/21/1992", "11:99");
+    MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation","07/21/3000", "11:00", "07/21/1992", "11:99");
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.TIME_NOT_CORRECT));
+    assertThat(result.getExitCode(), equalTo(1));
+  }
+  /**
+   * Tests that invoking the main method with an end time using characters fails
+   */
+  @Test
+  void testTimeIsNumber() {
+    MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation","07/21/3000", "11:xx", "07/21/1992", "11:99");
     assertThat(result.getTextWrittenToStandardError(), containsString(Project1.TIME_NOT_CORRECT));
     assertThat(result.getExitCode(), equalTo(1));
   }
@@ -127,6 +136,15 @@ class Project1IT extends InvokeMainTestCase {
   @Test
   void testDateYearInRange() {
     MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation","12/31/300", "11:00", "07/21/1992", "11:11");
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project1.DATE_NOT_CORRECT));
+    assertThat(result.getExitCode(), equalTo(1));
+  }
+  /**
+   * Tests that invoking the main method with a character issues error
+   */
+  @Test
+  void testDateIsNums() {
+    MainMethodResult result = invokeMain(Project1.class, "Cody", "Head Transplant Consultation","12/31/CODY", "11:00", "07/21/1992", "11:11");
     assertThat(result.getTextWrittenToStandardError(), containsString(Project1.DATE_NOT_CORRECT));
     assertThat(result.getExitCode(), equalTo(1));
   }
