@@ -11,11 +11,22 @@ public class TextParser implements AppointmentBookParser<AppointmentBook> {
 
     private BufferedReader r;
 
+    /**
+     * Creates a new <code>TextParser</code>
+     * @param r
+     *      The Reader for TextParser
+     */
     public TextParser(Reader r) {
         this.r = new BufferedReader(r);
     }
 
-
+    /**
+     * Parses a file and builds an <code>AppointmentBook</code>
+     * with the information
+     * @return
+     *      null if nothing, built <code>AppointmentBook</code> if success
+     * @throws ParserException
+     */
     public AppointmentBook parse() throws ParserException {
         try {
             if(!r.ready()) {

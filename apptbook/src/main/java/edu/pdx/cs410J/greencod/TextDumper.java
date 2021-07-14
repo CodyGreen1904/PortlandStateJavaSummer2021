@@ -5,13 +5,30 @@ import edu.pdx.cs410J.AppointmentBookDumper;
 import java.io.IOException;
 import java.io.Writer;
 
+/**
+ * This class represents an <code>TextDumper</code>.
+ */
+
 public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
     private Writer w;
 
+    /**
+     * Creates a new <code>TextDumper</code>
+     * @param w
+     *      The Writer for TextDumper
+     */
     public TextDumper(Writer w) {
         this.w = w;
     }
 
+    /**
+     * Creates a dummy file with text based on what num is equal to, used to test for missing args with TextParser
+     * (not in use when grading)
+     *
+     * @param num
+     *      Key used for switch statement
+     * @throws IOException
+     */
     public void exampleFileCreate(int num) throws IOException {
         switch (num) {
             case 2: w.write("Cody"); break;
@@ -25,6 +42,12 @@ public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
         w.flush();
     }
 
+    /**
+     * Used to write <code>AppointmentBook</code> to files
+     * @param b
+     *      <code>AppointmentBook</code> being added
+     * @throws IOException
+     */
     public void dump(AppointmentBook b) throws IOException {
         if(b.getOwnerName() == null){
             System.out.println(Project2.NO_OWNER_PROVIDED);

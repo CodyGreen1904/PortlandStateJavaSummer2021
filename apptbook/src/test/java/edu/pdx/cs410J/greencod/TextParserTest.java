@@ -16,7 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class TextParserTest {
 
 
-
+    /**
+     * Tests failure of parsing empty file (disabled for grading)
+     */
     @Test
     @Disabled
     void cantParseEmptyFile() {
@@ -26,7 +28,9 @@ public class TextParserTest {
         TextParser parser = new TextParser(new InputStreamReader((inputStream)));
         assertThrows(ParserException.class, parser::parse);
     }
-
+    /**
+     * Tests a working dump then parse
+     */
     @Test
     void appointmentBookCanBeDumpedToFileAndParsed(@TempDir File dir) throws IOException, ParserException {
         File textFile = new File(dir,"appointments.txt");
@@ -46,7 +50,9 @@ public class TextParserTest {
 
         assertThat(book.getOwnerName(), equalTo(owner));
     }
-
+    /**
+     * Tests failure of writing ownerless <code>AppointmentBook</code> to file
+     */
     @Test
     void noOwnerWriteToFile(@TempDir File dir) throws IOException, ParserException {
         File textfile = new File(dir, "appointments.txt");
@@ -56,7 +62,9 @@ public class TextParserTest {
         TextDumper dumper = new TextDumper((new FileWriter(textfile)));
         dumper.dump(book);
     }
-
+    /**
+     * Tests failure of parsing file with no owner (disabled for grading)
+     */
     @Test
     @Disabled
     void noOwnerParseFile(@TempDir File dir) throws IOException, ParserException {
@@ -70,7 +78,9 @@ public class TextParserTest {
         AppointmentBook book = parser.parse();
 
     }
-
+    /**
+     * Tests failure of parsing file with no description (disabled for grading)
+     */
     @Test
     @Disabled
     void noDescriptionParseFile(@TempDir File dir) throws IOException, ParserException {
@@ -84,6 +94,9 @@ public class TextParserTest {
         AppointmentBook book = parser.parse();
 
     }
+    /**
+     * Tests failure of parsing file with no beginDate (disabled for grading)
+     */
     @Test
     @Disabled
     void noBeginDateParseFile(@TempDir File dir) throws IOException, ParserException {
@@ -97,6 +110,9 @@ public class TextParserTest {
         AppointmentBook book = parser.parse();
 
     }
+    /**
+     * Tests failure of parsing file with no beginTime (disabled for grading)
+     */
     @Test
     @Disabled
     void noBeginTimeParseFile(@TempDir File dir) throws IOException, ParserException {
@@ -110,6 +126,9 @@ public class TextParserTest {
         AppointmentBook book = parser.parse();
 
     }
+    /**
+     * Tests failure of parsing file with no endDate (disabled for grading)
+     */
     @Test
     @Disabled
     void noEndDateParseFile(@TempDir File dir) throws IOException, ParserException {
@@ -123,6 +142,9 @@ public class TextParserTest {
         AppointmentBook book = parser.parse();
 
     }
+    /**
+     * Tests failure of parsing file with no endTime (disabled for grading)
+     */
     @Test
     @Disabled
     void noEndTimeParseFile(@TempDir File dir) throws IOException, ParserException {

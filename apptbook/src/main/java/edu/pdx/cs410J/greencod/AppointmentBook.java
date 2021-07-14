@@ -19,7 +19,7 @@ public class AppointmentBook extends AbstractAppointmentBook<Appointment>{
      * Creates a new <code>AppointmentBook</code>
      *
      * @param owner
-     *        The owner of the appointmentbook
+     *        The owner of the <code>AppointmentBook</code>
      * @param appointment
      *        The appointment being added
      */
@@ -29,6 +29,12 @@ public class AppointmentBook extends AbstractAppointmentBook<Appointment>{
         this.addAppointment(appointment);
     }
 
+    /**
+     * Creates a new <code>AppointmentBook</code>
+     *
+     * @param owner
+     *        The owner of the <code>AppointmentBook</code>
+     */
     public AppointmentBook(String owner){
         this.owner = owner;
         this.appointments = new ArrayList<>();
