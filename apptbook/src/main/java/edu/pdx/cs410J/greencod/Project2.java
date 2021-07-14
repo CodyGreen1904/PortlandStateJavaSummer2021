@@ -31,6 +31,7 @@ public class Project2 {
   public static final String TOO_MANY_ARGUMENTS = "Too many command line arguments";
   public static final String UNKNOWN_COMMAND_LINE_ARGUMENT = "Unknown command line argument";
   public static final String OWNERS_DONT_MATCH = "Owner name in file is different than owner provided";
+  public static final String NO_OWNER_PROVIDED = "Somehow the program attempted to write an AppointmentBook with no owner to a file, file not created";
 
 
   /**

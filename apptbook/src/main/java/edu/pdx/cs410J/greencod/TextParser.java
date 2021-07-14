@@ -15,6 +15,7 @@ public class TextParser implements AppointmentBookParser<AppointmentBook> {
         this.r = new BufferedReader(r);
     }
 
+
     public AppointmentBook parse() throws ParserException {
         try {
             if(!r.ready()) {
@@ -56,8 +57,13 @@ public class TextParser implements AppointmentBookParser<AppointmentBook> {
             }
 
             return newAppointmentBook;
-        } catch (IOException e) {
-            throw new ParserException("Mistake in parser: ", e);
+        } catch (ParserException e) {
+            System.err.println("Mistake in parser: " + e);
+            System.exit(1);
+        } catch (IOException p) {
+            System.err.println("Mistake in parser: " + p);
+            System.exit(1);
         }
+        return null;
     }
 }

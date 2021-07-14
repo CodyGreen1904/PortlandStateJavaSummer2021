@@ -61,12 +61,21 @@ public class Appointment extends AbstractAppointment {
   public String getEndTimeString() {
     return endDate + " " + endTime;
   }
+  /**
+   * Returns the <code>String</code> <code>begindate</code>
+   */
   public String getBeginDate() { return beginDate;}
-
+  /**
+   * Returns the <code>String</code> <code>beginTime</code>
+   */
   public String getBeginTimeS() { return beginTime;}
-
+  /**
+   * Returns the <code>String</code> <code>endDate</code>
+   */
   public String getEndDate() { return endDate;}
-
+  /**
+   * Returns the <code>String</code> <code>endTime</code>
+   */
   public String getEndTimeS() { return endTime;}
   /**
    * Returns the <code>String</code> <code>description</code>
