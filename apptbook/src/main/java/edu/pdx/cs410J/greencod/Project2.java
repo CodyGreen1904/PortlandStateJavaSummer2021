@@ -1,9 +1,8 @@
 package edu.pdx.cs410J.greencod;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
+import edu.pdx.cs410J.ParserException;
+
+import java.io.*;
 
 /**
  * The main class for the CS410J appointment book Project
@@ -13,14 +12,15 @@ public class Project2 {
   public static final String MISSING_COMMAND_LINE_ARGUMENTS = "Missing command line arguments";
   public static final String USAGE_MESSAGE = "usage: java edu.pdx.cs410J.<login-id>.Project2 [options] <args>\n" +
           "args are (in this order):\n" +
-          "owner The person who owns the appt book\n" +
+          "owner The person whose owns the appt book\n" +
           "description A description of the appointment\n" +
           "begin When the appt begins (24-hour time)\n" +
           "end When the appt ends (24-hour time)\n" +
           "options are (options may appear in any order):\n" +
+          "-textFile file Where to read/write the appointment book\n" +
           "-print Prints a description of the new appointment\n" +
           "-README Prints a README for this project and exits\n" +
-          "Date and time should be in the format: mm/dd/yyyy hh:mm";
+          "Dates and times should be in the format: mm/dd/yyyy hh:mm";
   public static final String MISSING_DESCRIPTION = "Missing Description";
   public static final String MISSING_BEGIN_DATE = "Missing begin date";
   public static final String MISSING_BEGIN_TIME = "Missing begin time";
@@ -28,6 +28,10 @@ public class Project2 {
   public static final String MISSING_END_TIME = "Missing end time";
   public static final String TIME_NOT_CORRECT = "Incorrect Time: please use military time in format HH:MM";
   public static final String DATE_NOT_CORRECT = "Incorrect date: Please use mm/dd/yyyy";
+  public static final String TOO_MANY_ARGUMENTS = "Too many command line arguments";
+  public static final String UNKNOWN_COMMAND_LINE_ARGUMENT = "Unknown command line argument";
+  public static final String OWNERS_DONT_MATCH = "Owner name in file is different than owner provided";
+
 
   /**
    * Displays the README file and exits
@@ -127,11 +131,6 @@ public class Project2 {
       System.exit(1);
     }
 
-
-
-
-
-
     boolean leap = false;
 
     if(month < 0 || month > 12) {
@@ -182,23 +181,41 @@ public class Project2 {
    * <code>readMe()</code> and the -print with the <code>Apppointment</code>
    * <code>toString</code> method.
    */
-  public static void main(String[] args) throws IOException, NumberFormatException{
+  public static void main(String[] args) throws IOException, NumberFormatException, ParserException {
     String owner = null;
     String description = null;
     String beginDate = null;
     String beginTime = null;
     String endDate = null;
     String endTime = null;
-    boolean flag = false;
+    boolean fileFlag = false;
+    String fileLocation = null;
+    boolean printFlag = false;
 
     Project2 p = new Project2();
     for(String arg : args) {
-      if(arg.equals("-README")) {
-        p.readMe();
-        System.exit(0);
+      if(fileFlag == true) {
+        fileLocation = arg;
+        fileFlag = false;
+        continue;
       }
-      if(arg.equals("-print")) {
-        flag = true;
+      if(arg.startsWith("-")){
+        if(arg.equals("-README")) {
+          p.readMe();
+          System.exit(0);
+        }
+        if(arg.equals("-print")) {
+          printFlag = true;
+          continue;
+        } else if(arg.equals("-textFile")) {
+          fileFlag = true;
+          continue;
+        }
+        else{
+          System.err.println(UNKNOWN_COMMAND_LINE_ARGUMENT);
+          System.err.println(USAGE_MESSAGE);
+          System.exit(1);
+        }
       } else if(owner == null) {
         owner = arg;
       } else if(description == null) {
@@ -212,7 +229,7 @@ public class Project2 {
       } else if(endTime == null) {
         endTime = validateTime(arg);
       } else {
-        System.err.println("Too many command line arguments");
+        System.err.println(TOO_MANY_ARGUMENTS);
         System.err.println(USAGE_MESSAGE);
         System.exit(1);
       }
@@ -240,18 +257,41 @@ public class Project2 {
       System.exit(1);
     }
 
-    Appointment appointment = new Appointment(owner, description, beginDate, beginTime, endDate, endTime);
+    Appointment appointmentToAdd = new Appointment(owner, description, beginDate, beginTime, endDate, endTime);
+    AppointmentBook appointmentBook;
+    if(fileLocation != null) {
 
-    AppointmentBook appointmentBook = new AppointmentBook(owner, appointment);
+      TextParser parser;
+      TextDumper dumper;
+      File textFile = new File(fileLocation);
+      if(textFile.exists()) {
+        parser = new TextParser((new FileReader(textFile)));
+        appointmentBook = parser.parse();
+        if (appointmentBook.getOwnerName().equals(owner) == false) {
+          System.err.println(OWNERS_DONT_MATCH);
+          System.exit(1);
+        }
+      } else {
+        appointmentBook = new AppointmentBook(owner);
+      }
+        appointmentBook.addAppointment(appointmentToAdd);
 
-    if (flag) {
-      System.out.println(appointment);
+        dumper = new TextDumper(new FileWriter(textFile));
+        dumper.dump(appointmentBook);
+    }else {
+      appointmentBook = new AppointmentBook(owner);
+      appointmentBook.addAppointment(appointmentToAdd);
     }
+
+    if (printFlag) {
+      System.out.println(appointmentToAdd);
+    }
+
+    System.out.println();
 
     for (String arg : args) {
       System.out.println(arg);
     }
     System.exit(1);
   }
-
 }

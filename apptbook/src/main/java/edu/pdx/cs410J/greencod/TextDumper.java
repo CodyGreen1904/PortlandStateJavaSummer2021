@@ -13,8 +13,18 @@ public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
     }
 
     public void dump(AppointmentBook b) throws IOException {
-        w.write(b.getOwnerName());
-        w.flush();
+        if(b.getAppointments() != null) {
+            w.write(b.getOwnerName() + "\n");
+            Appointment[] appointments = b.getAppointments().toArray(new Appointment[0]);
+            for(Appointment appointment : appointments) {
+                w.write(appointment.getDescription() + "\n");
+                w.write(appointment.getBeginDate() + "\n");
+                w.write(appointment.getBeginTimeS() + "\n");
+                w.write(appointment.getEndDate() + "\n");
+                w.write(appointment.getBeginTimeS() + "\n");
+            }
+        }
+
         w.flush();
     }
 }

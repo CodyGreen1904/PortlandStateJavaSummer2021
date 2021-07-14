@@ -21,7 +21,41 @@ public class TextParser implements AppointmentBookParser<AppointmentBook> {
                 throw new ParserException("No Owner Provided");
             }
             String owner = r.readLine();
-            return new AppointmentBook(owner);
+            AppointmentBook newAppointmentBook = new AppointmentBook(owner);
+            String line;
+            String description = null;
+            String beginDate;
+            String beginTime;
+            String endDate;
+            String endTime;
+            if(owner != null){
+                while((line = r.readLine()) != null) {
+                    description = line;
+                    beginDate = r.readLine();
+                    if(beginDate == null){
+                        throw new ParserException("Missing Begin Date");
+                    }
+                    beginTime = r.readLine();
+                    if(beginTime == null){
+                        throw new ParserException("Missing Begin Time");
+                    }
+                    endDate = r.readLine();
+                    if(endDate == null){
+                        throw new ParserException("Missing End Date");
+                    }
+                    endTime = r.readLine();
+                    if(endTime == null){
+                        throw new ParserException("Missing End Time");
+                    }
+                    Appointment newAppointment = new Appointment(owner, description, beginDate, beginTime, endDate, endTime);
+                    newAppointmentBook.addAppointment(newAppointment);
+                }
+                if(description == null){
+                    throw new ParserException("Missing Description");
+                }
+            }
+
+            return newAppointmentBook;
         } catch (IOException e) {
             throw new ParserException("Mistake in parser: ", e);
         }

@@ -1,1 +1,1 @@
-This is a README file for Project 1! This program reads in arguments to create an appointment, then adds those appointments to an appointment book class that will be updated in later projects.
+Readme for project 2. This project pulls in an appointment, and either creates or adds to an existing appointment book to the file you specify.
