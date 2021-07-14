@@ -181,7 +181,7 @@ class Project2IT extends InvokeMainTestCase {
     assertThat(result.getTextWrittenToStandardError(), containsString(Project2.UNKNOWN_COMMAND_LINE_ARGUMENT));
     assertThat(result.getTextWrittenToStandardError(), containsString(Project2.USAGE_MESSAGE));
     assertThat(result.getExitCode(), equalTo(1));
-  } 
+  }
   /**
    * Tests that -textFile works when given not real file name **FIRST OF THREE TESTS DONE IN ORDER**
    */
