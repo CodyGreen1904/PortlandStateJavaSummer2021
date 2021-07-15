@@ -155,7 +155,7 @@ public class TextParserTest {
         dumper.exampleFileCreate(6);
 
         TextParser parser = new TextParser(new FileReader(textfile));
-        AppointmentBook book = parser.parse();;
+        AppointmentBook book = parser.parse();
 
 
 
