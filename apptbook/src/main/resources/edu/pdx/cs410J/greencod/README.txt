@@ -1,1 +1,1 @@
-Readme for project 2. This project pulls in an appointment, and either creates or adds to an existing appointment book to the file you specify.
+Readme for project 3. This project pulls in an appointment, and either creates or adds to an existing appointment book to the file you specify. You can also pretty print it to a new file, as well as just do pretty output

@@ -180,20 +180,20 @@ class Project3IT extends InvokeMainTestCase {
    */
   @Test
   void testPrint() {
-    MainMethodResult result = invokeMain(Project3.class, "-print", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "am", "07/21/1992", "11:11", "pm");
-    assertThat(result.getTextWrittenToStandardOut(), containsString(("Head Transplant Consultation from 12/31/00, 11:00 AM until 7/21/92, 11:11 PM")));
+    MainMethodResult result = invokeMain(Project3.class, "-print", "Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "pm");
+    assertThat(result.getTextWrittenToStandardOut(), containsString(("Head Transplant Consultation from 7/21/92, 11:00 AM until 7/21/92, 11:11 PM")));
   }
   @Test
   void testReadMe() {
     MainMethodResult result = invokeMain(Project3.class, "-README", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "am", "07/21/1992", "11:11", "pm");
-    assertThat(result.getTextWrittenToStandardOut(), containsString("Readme for project 2. This project pulls in an appointment, and either creates or adds to an existing appointment book to the file you specify."));
+    assertThat(result.getTextWrittenToStandardOut(), containsString("Readme for project 3. This project pulls in an appointment, and either creates or adds to an existing appointment book to the file you specify. You can also pretty print it to a new file, as well as just do pretty output"));
   }
   /**
    * Tests that invoking the main method with unknown arguments issues an error and shows usage message
    */
   @Test
   void testUnknownArgsPrintsUnknownArgs(){
-    MainMethodResult result = invokeMain(Project3.class, "-print", "-Eliza", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "am", "07/21/1992", "11:11", "pm");
+    MainMethodResult result = invokeMain(Project3.class, "-print", "-Eliza", "Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "pm");
     assertThat(result.getTextWrittenToStandardError(), containsString(Project3.UNKNOWN_COMMAND_LINE_ARGUMENT));
     assertThat(result.getTextWrittenToStandardError(), containsString(Project3.USAGE_MESSAGE));
     assertThat(result.getExitCode(), equalTo(1));
@@ -203,24 +203,40 @@ class Project3IT extends InvokeMainTestCase {
    */
   @Test
   void testFakeFileWriter() {
-    MainMethodResult result = invokeMain(Project3.class, "-print", "-textFile", "Cody", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "am", "07/21/1992", "11:11", "pm");
-    assertThat(result.getTextWrittenToStandardOut(), containsString(("Head Transplant Consultation from 12/31/00, 11:00 AM until 7/21/92, 11:11 PM")));
+    MainMethodResult result = invokeMain(Project3.class, "-print", "-textFile", "Cody", "Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "pm");
+    assertThat(result.getTextWrittenToStandardOut(), containsString(("Head Transplant Consultation from 7/21/92, 11:00 AM until 7/21/92, 11:11 PM")));
   }
   /**
    * Tests that -textFile works when given not real file name **SECOND OF THREE TESTS DONE IN ORDER**
    */
   @Test
   void testFakeFileWriterAgain() {
-    MainMethodResult result = invokeMain(Project3.class, "-print", "-textFile", "Cody", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "am", "07/21/1992", "11:11", "pm");
-    assertThat(result.getTextWrittenToStandardOut(), containsString("Head Transplant Consultation from 12/31/00, 11:00 AM until 7/21/92, 11:11 PM"));
+    MainMethodResult result = invokeMain(Project3.class, "-print", "-textFile", "Cody", "Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "pm");
+    assertThat(result.getTextWrittenToStandardOut(), containsString("Head Transplant Consultation from 7/21/92, 11:00 AM until 7/21/92, 11:11 PM"));
   }
   /**
    * Tests that -textFile works when given not real file name **THIRD OF THREE TESTS DONE IN ORDER**
    */
   @Test
   void testFakeFileWriterWrongOwner() {
-    MainMethodResult result = invokeMain(Project3.class, "-print", "-textFile", "Cody", "Not Cody", "Head Transplant Consultation","12/31/3000", "11:00", "am", "07/21/1992", "11:11", "pm");
+    MainMethodResult result = invokeMain(Project3.class, "-print", "-textFile", "Cody", "Not Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "pm");
     assertThat(result.getTextWrittenToStandardError(), containsString(Project3.OWNERS_DONT_MATCH));
+  }
+  @Test
+  void testIfStartAfterEnd(){
+    MainMethodResult result = invokeMain(Project3.class, "-print", "-pretty", "Pretty", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "am", "07/21/1992", "11:11", "pm");
+    assertThat(result.getTextWrittenToStandardError(), containsString(Project3.BEGIN_AFTER_END));
+    assertThat(result.getExitCode(), equalTo(1));
+  }
+  @Test
+  void testPrettyPrinter() {
+    MainMethodResult result = invokeMain(Project3.class, "-print", "-pretty", "Pretty", "Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "am");
+    assertThat(result.getTextWrittenToStandardOut(), containsString("Head Transplant Consultation from 7/21/92, 11:00 AM until 7/21/92, 11:11 AM"));
+  }
+  @Test
+  void testPrettyPrinterOutput() {
+    MainMethodResult result = invokeMain(Project3.class, "-print", "-pretty", "-", "Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "pm");
+    assertThat(result.getTextWrittenToStandardOut(), containsString("This Appointment Book belongs to Cody, The Coolest Cat in the Cave"));
   }
 
 

@@ -46,8 +46,6 @@ public class TextParserTest {
         book.addAppointment(new Appointment(owner, "Head Transplant Consultation", bd, ed, deetz));
 
 
-        book.addAppointment(new Appointment(owner, "Head Transplant Consultation", bd, ed, deetz));
-
         TextDumper dumper = new TextDumper(new FileWriter(textFile));
         dumper.dump(book);
 
@@ -165,5 +163,43 @@ public class TextParserTest {
 
 
 
+    }
+    @Test
+    void appointmentBookSortedWhenParsed() throws IOException, ParserException {
+        File textFile = new File("appointments.txt");
+
+        String owner = "Owner";
+        AppointmentBook book = new AppointmentBook(owner);
+        StringBuilder s = new StringBuilder("07/21/1992 11:11 am");
+        Date bd = Project3.sDateFormatter(s);
+        s = new StringBuilder("07/21/1992 11:15 am");
+        Date ed = Project3.sDateFormatter(s);
+        String deetz[] = new String[] {"07/21/1992", "11:11", "am", "07/21/1992", "11:15", "am"};
+        book.addAppointment(new Appointment(owner, "Head Transplant Consultation", bd, ed, deetz));
+
+        book.addAppointment(new Appointment(owner, "bbb", bd, ed, deetz));
+        book.addAppointment(new Appointment(owner, "a", bd, ed, deetz));
+
+
+        String deetz2[] = new String[] {"07/21/1992", "11:11", "am", "07/21/1991", "11:15", "am"};
+        s = new StringBuilder("07/21/1991 11:15 am");
+        ed = Project3.sDateFormatter(s);
+        book.addAppointment(new Appointment(owner, "Head Transplant Consultation", bd, ed, deetz2));
+        String deetz3[] = new String[] {"07/21/1991", "11:00", "am", "07/21/1991", "11:15", "am"};
+        s = new StringBuilder("07/21/1991 11:00 am");
+        bd = Project3.sDateFormatter(s);
+
+        book.addAppointment(new Appointment(owner, "Head Transplant Consultation", bd, ed, deetz3));
+
+        TextDumper dumper = new TextDumper(new FileWriter(textFile));
+        dumper.dump(book);
+
+        TextParser parser = new TextParser(new FileReader(textFile));
+        book = parser.parse();
+
+        dumper = new TextDumper(new FileWriter(textFile));
+        dumper.dump(book);
+
+        assertThat(book.getOwnerName(), equalTo(owner));
     }
 }

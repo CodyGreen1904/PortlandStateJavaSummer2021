@@ -11,7 +11,7 @@ import java.util.Date;
  * This class represents an <code>Appointment</code>.
  */
 
-public class Appointment extends AbstractAppointment {
+public class Appointment extends AbstractAppointment implements Comparable<Appointment>{
 
   private String owner = null;
   private String description = null;
@@ -43,7 +43,16 @@ public class Appointment extends AbstractAppointment {
     this.end = end;
     this.deetz = deetz;
   }
-
+  @Override
+  public int compareTo(Appointment compare) {
+    if(this.begin == compare.getBeginTime()){
+      if(this.end == compare.getEndTime()){
+        return this.description.compareTo(compare.getDescription());
+      }
+      return this.end.compareTo(compare.getEndTime());
+    }
+    return this.begin.compareTo(compare.getBeginTime());
+  }
   /**
    * Returns the <code>String</code> <code>description</code>
    */

@@ -4,6 +4,7 @@ import edu.pdx.cs410J.AbstractAppointmentBook;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 
 /**
@@ -63,5 +64,10 @@ public class AppointmentBook extends AbstractAppointmentBook<Appointment>{
      */
     public void addAppointment(Appointment var1){
         appointments.add(var1);
+        Collections.sort(appointments);
+    }
+
+    public void sortAppointments(){
+        Collections.sort(appointments);
     }
 }

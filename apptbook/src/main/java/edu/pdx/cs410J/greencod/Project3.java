@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The main class for the CS410J appointment book Project
@@ -38,14 +39,20 @@ public class Project3 {
   public static final String OWNERS_DONT_MATCH = "Owner name in file is different than owner provided";
   public static final String NO_OWNER_PROVIDED = "Somehow the program attempted to write an AppointmentBook with no owner to a file, file not created";
   public static final String ERROR_PARSING_DATE = "Incorrect date format, use MM/dd/yyyy hh:mm a";
-  private static final String MISSING_BEGIN_PERIOD = "Missing begin time period";
-  private static final String MISSING_END_PERIOD = "Missing end time period";
+  public static final String MISSING_BEGIN_PERIOD = "Missing begin time period";
+  public static final String MISSING_END_PERIOD = "Missing end time period";
+  public static final String BEGIN_AFTER_END = "The appointment's start time must be before the appointment's end time";
 
   public static StringBuilder sToSb(String date, String time, String period) {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(date + " " + time + " " + period);
 
     return stringBuilder;
+  }
+  public static long getMinutes(Date d1, Date d2){
+    long difference = d2.getTime() - d1.getTime();
+    difference = TimeUnit.MILLISECONDS.toMinutes(difference);
+    return difference;
   }
 
 
@@ -232,15 +239,28 @@ public class Project3 {
     boolean fileFlag = false;
     String fileLocation = null;
     boolean printFlag = false;
+    boolean prettyPrintFlag = false;
+    boolean prettyFileFlag = false;
+    String prettyFileLocation = null;
     Date beginD = null;
     Date endD = null;
 
 
     Project3 p = new Project3();
     for(String arg : args) {
-      if(fileFlag == true) {
+      if(fileFlag) {
         fileLocation = arg;
         fileFlag = false;
+        continue;
+      }
+      if (prettyFileFlag) {
+        if(arg.equals("-")){
+          prettyFileFlag = false;
+          prettyPrintFlag = true;
+          continue;
+        }
+        prettyFileLocation = arg;
+        prettyFileFlag = false;
         continue;
       }
       if(arg.startsWith("-")){
@@ -253,6 +273,9 @@ public class Project3 {
           continue;
         } else if(arg.equals("-textFile")) {
           fileFlag = true;
+          continue;
+        } else if(arg.equals("-pretty")){
+          prettyFileFlag = true;
           continue;
         }
         else{
@@ -317,29 +340,46 @@ public class Project3 {
     dateString = sToSb(endDate, endTime, endPeriod);
     endD = sDateFormatter(dateString);
 
+    if(beginD.compareTo(endD) >= 0){
+      System.err.println(BEGIN_AFTER_END);
+      System.exit(1);
+    }
+
     String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
 
     Appointment appointmentToAdd = new Appointment(owner, description, beginD, endD, deetz);
-    AppointmentBook appointmentBook;
-    if(fileLocation != null) {
-
-      TextParser parser;
-      TextDumper dumper;
-      File textFile = new File(fileLocation);
-      if(textFile.exists()) {
-        parser = new TextParser((new FileReader(textFile)));
-        appointmentBook = parser.parse();
-        if (!appointmentBook.getOwnerName().equals(owner)) {
-          System.err.println(OWNERS_DONT_MATCH);
-          System.exit(1);
+    AppointmentBook appointmentBook = null;
+    if(fileLocation != null || prettyFileLocation != null) {
+      if (fileLocation != null) {
+        TextParser parser;
+        TextDumper dumper;
+        File textFile = new File(fileLocation);
+        if(textFile.exists()) {
+          parser = new TextParser((new FileReader(textFile)));
+          appointmentBook = parser.parse();
+          if (!appointmentBook.getOwnerName().equals(owner)) {
+            System.err.println(OWNERS_DONT_MATCH);
+            System.exit(1);
+          }
+        } else {
+          appointmentBook = new AppointmentBook(owner);
         }
-      } else {
-        appointmentBook = new AppointmentBook(owner);
-      }
         appointmentBook.addAppointment(appointmentToAdd);
+
 
         dumper = new TextDumper(new FileWriter(textFile));
         dumper.dump(appointmentBook);
+      }
+      if (prettyFileLocation != null) {
+        PrettyPrinter prettyDumper;
+        File prettytextFile = new File(prettyFileLocation);
+
+        appointmentBook = new AppointmentBook(owner);
+        appointmentBook.addAppointment(appointmentToAdd);
+
+        prettyDumper = new PrettyPrinter(new FileWriter(prettytextFile));
+        prettyDumper.dump(appointmentBook);
+      }
     }else {
       appointmentBook = new AppointmentBook(owner);
       appointmentBook.addAppointment(appointmentToAdd);
@@ -347,6 +387,9 @@ public class Project3 {
 
     if (printFlag) {
       System.out.println(appointmentToAdd);
+    }
+    if (prettyPrintFlag) {
+      System.out.println(PrettyPrinter.prettyPrint(appointmentBook));
     }
 
     System.out.println();
