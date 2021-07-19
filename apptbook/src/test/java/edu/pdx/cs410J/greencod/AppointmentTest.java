@@ -3,6 +3,8 @@ package edu.pdx.cs410J.greencod;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.Date;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -42,29 +44,16 @@ public class AppointmentTest {
   }
 
   /**
-   * Shows beginTimeString functions correctly
-   */
-  @Test
-  void doesGetBeginTimeStringWork() {
-    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
-    assertThat(appointment.getBeginTimeString(), containsString("07/21/1992 11:11"));
-  }
-
-  /**
-   * Shows endTimeString functions correctly
-   */
-  @Test
-  void doesGetEndTimeStringWork() {
-    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
-    assertThat(appointment.getEndTimeString(), containsString("07/21/1992 11:15"));
-  }
-
-  /**
    * Shows getDescription functions correctly
    */
   @Test
   void doesGetDescriptionWork() {
-    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
+    StringBuilder s = new StringBuilder("07/21/1992 11:11 am");
+    Date bd = Project3.sDateFormatter(s);
+    s = new StringBuilder("07/21/1992 11:15 am");
+    Date ed = Project3.sDateFormatter(s);
+    String[] deetz = new String[] {"07/21/1992", "11:11", "am", "07/21/1992", "11:15", "am"};
+    Appointment appointment = new Appointment("Cody", "Haircut", bd, ed, deetz);
     assertThat(appointment.getDescription(), containsString("Haircut"));
   }
 
@@ -73,23 +62,38 @@ public class AppointmentTest {
    */
   @Test
   void doesToStringWork() {
-    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
-    assertThat(appointment.toString(), containsString("Haircut from 07/21/1992 11:11 until 07/21/1992 11:15"));
+    StringBuilder s = new StringBuilder("07/21/1992 11:11 am");
+    Date bd = Project3.sDateFormatter(s);
+    s = new StringBuilder("07/21/1992 11:15 am");
+    Date ed = Project3.sDateFormatter(s);
+    String deetz[] = new String[] {"07/21/1992", "11:11", "am", "07/21/1992", "11:15", "am"};
+    Appointment appointment = new Appointment("Cody", "Haircut", bd, ed, deetz);
+    assertThat(appointment.toString(), containsString("Haircut from 7/21/92, 11:11 AM until 7/21/92, 11:15 AM"));
   }
 
   @Test
   void doesOwnerNameWork() {
-    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
+    StringBuilder s = new StringBuilder("07/21/1992 11:11 am");
+    Date bd = Project3.sDateFormatter(s);
+    s = new StringBuilder("07/21/1992 11:15 am");
+    Date ed = Project3.sDateFormatter(s);
+    String deetz[] = new String[] {"07/21/1992", "11:11", "am", "07/21/1992", "11:15", "am"};
+    Appointment appointment = new Appointment("Cody", "Haircut", bd, ed, deetz);
     AppointmentBook appointmentBook = new AppointmentBook("Cody", appointment);
     assertThat(appointmentBook.getOwnerName(), containsString("Cody"));
   }
   @Test
   void doesAddAppointmentAndGetAppointmentWork() {
-    Appointment appointment = new Appointment("Cody", "Haircut", "07/21/1992", "11:11", "07/21/1992", "11:15");
+    StringBuilder s = new StringBuilder("07/21/1992 11:11 am");
+    Date bd = Project3.sDateFormatter(s);
+    s = new StringBuilder("07/21/1992 11:15 am");
+    Date ed = Project3.sDateFormatter(s);
+    String deetz[] = new String[] {"07/21/1992", "11:11", "am", "07/21/1992", "11:15", "am"};
+    Appointment appointment = new Appointment("Cody", "Haircut", bd, ed, deetz);
     AppointmentBook appointmentBook = new AppointmentBook("Cody", appointment);
     appointmentBook.addAppointment(appointment);
     for(Appointment appnt : appointmentBook.getAppointments()) {
-      assertThat(appnt.toString(), containsString("Haircut from 07/21/1992 11:11 until 07/21/1992 11:15"));
+      assertThat(appnt.toString(), containsString("Haircut from 7/21/92, 11:11 AM until 7/21/92, 11:15 AM"));
     }
     assertThat(appointmentBook.getOwnerName(), containsString("Cody"));
   }

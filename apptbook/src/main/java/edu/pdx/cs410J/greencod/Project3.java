@@ -3,35 +3,50 @@ package edu.pdx.cs410J.greencod;
 import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * The main class for the CS410J appointment book Project
  */
-public class Project2 {
+public class Project3 {
 
   public static final String MISSING_COMMAND_LINE_ARGUMENTS = "Missing command line arguments";
-  public static final String USAGE_MESSAGE = "usage: java edu.pdx.cs410J.<login-id>.Project2 [options] <args>\n" +
+  public static final String USAGE_MESSAGE = "usage: java edu.pdx.cs410J.<login-id>.Project3 [options] <args>\n" +
           "args are (in this order):\n" +
           "owner The person whose owns the appt book\n" +
           "description A description of the appointment\n" +
-          "begin When the appt begins (24-hour time)\n" +
-          "end When the appt ends (24-hour time)\n" +
+          "begin When the appt begins\n" +
+          "end When the appt ends\n" +
           "options are (options may appear in any order):\n" +
-          "-textFile file Where to read/write the appointment book\n" +
+          "-pretty file Pretty print the appointment book to\n" +
+          "a text file or standard out (file -)\n" +
+          "-textFile file Where to read/write the appt book info\n" +
           "-print Prints a description of the new appointment\n" +
-          "-README Prints a README for this project and exits\n" +
-          "Dates and times should be in the format: mm/dd/yyyy hh:mm";
+          "-README Prints a README for this project and exits";
   public static final String MISSING_DESCRIPTION = "Missing Description";
   public static final String MISSING_BEGIN_DATE = "Missing begin date";
   public static final String MISSING_BEGIN_TIME = "Missing begin time";
   public static final String MISSING_END_DATE = "Missing end date";
   public static final String MISSING_END_TIME = "Missing end time";
-  public static final String TIME_NOT_CORRECT = "Incorrect Time: please use military time in format HH:MM";
+  public static final String TIME_NOT_CORRECT = "Incorrect Time: please use 12 hour time in format HH:MM with either am or pm";
   public static final String DATE_NOT_CORRECT = "Incorrect date: Please use mm/dd/yyyy";
   public static final String TOO_MANY_ARGUMENTS = "Too many command line arguments";
   public static final String UNKNOWN_COMMAND_LINE_ARGUMENT = "Unknown command line argument";
   public static final String OWNERS_DONT_MATCH = "Owner name in file is different than owner provided";
   public static final String NO_OWNER_PROVIDED = "Somehow the program attempted to write an AppointmentBook with no owner to a file, file not created";
+  public static final String ERROR_PARSING_DATE = "Incorrect date format, use MM/dd/yyyy hh:mm a";
+  private static final String MISSING_BEGIN_PERIOD = "Missing begin time period";
+  private static final String MISSING_END_PERIOD = "Missing end time period";
+
+  public static StringBuilder sToSb(String date, String time, String period) {
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append(date + " " + time + " " + period);
+
+    return stringBuilder;
+  }
 
 
   /**
@@ -39,7 +54,7 @@ public class Project2 {
    */
   public void readMe() throws IOException {
     try (
-            InputStream readme = Project2.class.getResourceAsStream("README.txt")
+            InputStream readme = Project3.class.getResourceAsStream("README.txt")
     ) {
       BufferedReader reader = new BufferedReader(new InputStreamReader(readme));
       String line = reader.readLine();
@@ -74,7 +89,7 @@ public class Project2 {
 
 
 
-    if(hour < 0 || hour > 23 || minute < 0 || minute > 59){
+    if(hour < 0 || hour > 12 || minute < 0 || minute > 59){
       System.err.println(TIME_NOT_CORRECT);
       System.exit(1);
     }
@@ -173,10 +188,33 @@ public class Project2 {
 
     return old;
   }
+  /**
+   * Ensures the format of period is am or pm
+   */
+  public static String validatePeriod(String old) {
+    if(old.equalsIgnoreCase("am")  || old.equalsIgnoreCase("pm")) {
+      return old;
+    } else {
+      System.err.println(TIME_NOT_CORRECT);
+      System.exit(1);
+    }
+    return old;
+  }
+
+  public static Date sDateFormatter(StringBuilder old){
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+    try {
+      return simpleDateFormat.parse(old.toString());
+    } catch (ParseException e) {
+      System.err.println("Problem parsing string into date");
+      System.exit(1);
+    }
+    return null;
+  }
 
   /**
    * Main program that parses the command line, verifies input creates a
-   * <code>Project2</code>, creates an <code>Appointment</code>
+   * <code>Project3</code>, creates an <code>Appointment</code>
    * , an <code>AppointmentBook</code>, and adds the appointment to
    * the appointment book. Also shows the README with
    * <code>readMe()</code> and the -print with the <code>Apppointment</code>
@@ -187,13 +225,18 @@ public class Project2 {
     String description = null;
     String beginDate = null;
     String beginTime = null;
+    String beginPeriod = null;
     String endDate = null;
     String endTime = null;
+    String endPeriod = null;
     boolean fileFlag = false;
     String fileLocation = null;
     boolean printFlag = false;
+    Date beginD = null;
+    Date endD = null;
 
-    Project2 p = new Project2();
+
+    Project3 p = new Project3();
     for(String arg : args) {
       if(fileFlag == true) {
         fileLocation = arg;
@@ -225,10 +268,14 @@ public class Project2 {
         beginDate = validateDate(arg);
       } else if(beginTime == null) {
         beginTime = validateTime(arg);
+      } else if(beginPeriod == null) {
+        beginPeriod = validatePeriod(arg);
       } else if(endDate == null) {
         endDate = validateDate(arg);
       } else if(endTime == null) {
         endTime = validateTime(arg);
+      } else if(endPeriod == null) {
+        endPeriod = validatePeriod(arg);
       } else {
         System.err.println(TOO_MANY_ARGUMENTS);
         System.err.println(USAGE_MESSAGE);
@@ -250,15 +297,29 @@ public class Project2 {
     } else if(beginTime == null) {
       System.err.println(MISSING_BEGIN_TIME);
       System.exit(1);
+    } else if(beginPeriod == null){
+      System.err.println(MISSING_BEGIN_PERIOD);
+      System.exit(1);
     } else if(endDate == null) {
       System.err.println(MISSING_END_DATE);
       System.exit(1);
     } else if(endTime == null) {
       System.err.println(MISSING_END_TIME);
       System.exit(1);
+    } else if(endPeriod == null) {
+      System.err.println(MISSING_END_PERIOD);
+      System.exit(1);
     }
 
-    Appointment appointmentToAdd = new Appointment(owner, description, beginDate, beginTime, endDate, endTime);
+    StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
+
+    beginD = sDateFormatter(dateString);
+    dateString = sToSb(endDate, endTime, endPeriod);
+    endD = sDateFormatter(dateString);
+
+    String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+
+    Appointment appointmentToAdd = new Appointment(owner, description, beginD, endD, deetz);
     AppointmentBook appointmentBook;
     if(fileLocation != null) {
 
@@ -268,7 +329,7 @@ public class Project2 {
       if(textFile.exists()) {
         parser = new TextParser((new FileReader(textFile)));
         appointmentBook = parser.parse();
-        if (appointmentBook.getOwnerName().equals(owner) == false) {
+        if (!appointmentBook.getOwnerName().equals(owner)) {
           System.err.println(OWNERS_DONT_MATCH);
           System.exit(1);
         }

@@ -6,6 +6,7 @@ import edu.pdx.cs410J.ParserException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Date;
 
 public class TextParser implements AppointmentBookParser<AppointmentBook> {
 
@@ -26,6 +27,7 @@ public class TextParser implements AppointmentBookParser<AppointmentBook> {
      * @return
      *      null if nothing, built <code>AppointmentBook</code> if success
      * @throws ParserException
+     *          With explanation
      */
     public AppointmentBook parse() throws ParserException {
         try {
@@ -40,33 +42,56 @@ public class TextParser implements AppointmentBookParser<AppointmentBook> {
             String beginTime;
             String endDate;
             String endTime;
+            String beginPeriod;
+            String endPeriod;
             if(owner != null){
+                System.out.println("Checking contents of file....");
+
                 while((line = r.readLine()) != null) {
                     description = line;
                     beginDate = r.readLine();
                     if(beginDate == null){
                         throw new ParserException("Missing Begin Date");
                     }
+                    Project3.validateDate(beginDate);
                     beginTime = r.readLine();
                     if(beginTime == null){
                         throw new ParserException("Missing Begin Time");
                     }
+                    Project3.validateTime(beginTime);
+                    beginPeriod = r.readLine();
+                    if(beginPeriod == null){
+                        throw new ParserException("Missing Begin Period");
+                    }
+                    Project3.validatePeriod(beginPeriod);
                     endDate = r.readLine();
                     if(endDate == null){
                         throw new ParserException("Missing End Date");
                     }
+                    endDate = Project3.validateDate(endDate);
                     endTime = r.readLine();
                     if(endTime == null){
                         throw new ParserException("Missing End Time");
                     }
-                    Appointment newAppointment = new Appointment(owner, description, beginDate, beginTime, endDate, endTime);
+                    Project3.validateTime(endTime);
+                    endPeriod = r.readLine();
+                    if(endPeriod == null){
+                        throw new ParserException("Missing End Period");
+                    }
+                    Project3.validatePeriod(endPeriod);
+                    StringBuilder dateString = Project3.sToSb(beginDate, beginTime, beginPeriod);
+                    Date bd = Project3.sDateFormatter(dateString);
+                    dateString = Project3.sToSb(endDate, endTime, endPeriod);
+                    Date ed = Project3.sDateFormatter(dateString);
+                    String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+                    Appointment newAppointment = new Appointment(owner, description, bd, ed, deetz);
                     newAppointmentBook.addAppointment(newAppointment);
                 }
                 if(description == null){
                     throw new ParserException("Missing Description");
                 }
             }
-
+            System.out.println("file contents good");
             return newAppointmentBook;
         } catch (ParserException e) {
             System.err.println("Mistake in parser: " + e);

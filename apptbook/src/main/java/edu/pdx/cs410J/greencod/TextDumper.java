@@ -50,7 +50,7 @@ public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
      */
     public void dump(AppointmentBook b) throws IOException {
         if(b.getOwnerName() == null){
-            System.out.println(Project2.NO_OWNER_PROVIDED);
+            System.out.println(Project3.NO_OWNER_PROVIDED);
             return;
         }
         w.write(b.getOwnerName() + "\n");
@@ -58,10 +58,9 @@ public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
             Appointment[] appointments = b.getAppointments().toArray(new Appointment[0]);
             for(Appointment appointment : appointments) {
                 w.write(appointment.getDescription() + "\n");
-                w.write(appointment.getBeginDate() + "\n");
-                w.write(appointment.getBeginTimeS() + "\n");
-                w.write(appointment.getEndDate() + "\n");
-                w.write(appointment.getEndTimeS() + "\n");
+                for(String d : appointment.getDeetz()){
+                    w.write(d + "\n");
+                }
             }
         }
 

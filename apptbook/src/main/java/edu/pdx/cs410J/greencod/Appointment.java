@@ -2,6 +2,11 @@ package edu.pdx.cs410J.greencod;
 
 import edu.pdx.cs410J.AbstractAppointment;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * This class represents an <code>Appointment</code>.
  */
@@ -10,10 +15,9 @@ public class Appointment extends AbstractAppointment {
 
   private String owner = null;
   private String description = null;
-  private String beginDate = null;
-  private String beginTime = null;
-  private String endDate = null;
-  private String endTime = null;
+  private Date begin = null;
+  private Date end = null;
+  private String deetz[] = null;
 
   /**
    * Creates a new <code>Appointment</code>
@@ -27,56 +31,19 @@ public class Appointment extends AbstractAppointment {
    *        The owner of the appointment
    * @param description
    *        a brief description of the appointment
-   * @param beginDate
-   *        The start date of the appointment
-   * @param beginTime
-   *        The start time of the appointment
-   * @param endDate
-   *        The end date of the appointment
-   * @param endTime
-   *        The end time of the appointment
+   * @param begin
+   *        The begin date
+   * @param end
+   *        The end date
    */
-  public Appointment(String owner, String description, String beginDate, String beginTime, String endDate, String endTime) {
+  public Appointment(String owner, String description, Date begin, Date end, String deetz[]){
     this.owner = owner;
     this.description = description;
-    this.beginDate = beginDate;
-    this.beginTime = beginTime;
-    this.endDate = endDate;
-    this.endTime = endTime;
+    this.begin = begin;
+    this.end = end;
+    this.deetz = deetz;
   }
 
-  /**
-   * Returns the <code>String</code> combination of
-   * <code>beginDate</code> and <code>beginTime</code>
-   */
-  @Override
-  public String getBeginTimeString() {
-    return beginDate + " " + beginTime;
-  }
-  /**
-   * Returns the <code>String</code> combination of
-   * <code>endDate</code> and <code>endTime</code>
-   */
-  @Override
-  public String getEndTimeString() {
-    return endDate + " " + endTime;
-  }
-  /**
-   * Returns the <code>String</code> <code>begindate</code>
-   */
-  public String getBeginDate() { return beginDate;}
-  /**
-   * Returns the <code>String</code> <code>beginTime</code>
-   */
-  public String getBeginTimeS() { return beginTime;}
-  /**
-   * Returns the <code>String</code> <code>endDate</code>
-   */
-  public String getEndDate() { return endDate;}
-  /**
-   * Returns the <code>String</code> <code>endTime</code>
-   */
-  public String getEndTimeS() { return endTime;}
   /**
    * Returns the <code>String</code> <code>description</code>
    */
@@ -84,4 +51,23 @@ public class Appointment extends AbstractAppointment {
   public String getDescription() {
     return description;
   }
+
+  public Date getBeginTime() {
+    return begin;
+  }
+
+  public Date getEndTime() {
+    return end;
+  }
+
+  public String[] getDeetz() {return deetz;}
+
+  public String getBeginTimeString() {
+    return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(begin);
+  }
+
+  public String getEndTimeString() {
+    return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(end);
+  }
+
 }
