@@ -43,19 +43,35 @@ public class Project3 {
   public static final String MISSING_END_PERIOD = "Missing end time period";
   public static final String BEGIN_AFTER_END = "The appointment's start time must be before the appointment's end time";
 
+  /**
+   * Pulls in three strings and returns a stringbuilder in the proper date format
+   * @param date
+   *  holds date string
+   * @param time
+   *  holds time string
+   * @param period
+   *  holds period string
+   * @return
+   */
   public static StringBuilder sToSb(String date, String time, String period) {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(date + " " + time + " " + period);
 
     return stringBuilder;
   }
+  /**
+   * Pulls in two dates and returns the minute difference in time
+   * @param d1
+   *  The starting date
+   * @param d2
+   * The ending date
+   * @return
+   */
   public static long getMinutes(Date d1, Date d2){
     long difference = d2.getTime() - d1.getTime();
     difference = TimeUnit.MILLISECONDS.toMinutes(difference);
     return difference;
   }
-
-
   /**
    * Displays the README file and exits
    */
@@ -73,7 +89,6 @@ public class Project3 {
       throw i;
     }
   }
-
   /**
    * Ensures the format of time is HH:MM
    */
@@ -207,7 +222,12 @@ public class Project3 {
     }
     return old;
   }
-
+  /**
+   * Pulls in a Stringbuildder in a MM/dd/yyyy hh:mm a format and returns a date parsed form it
+   * @param old
+   *  Stringbuilder that contains a string in a date format
+   * @return
+   */
   public static Date sDateFormatter(StringBuilder old){
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
     try {
@@ -218,7 +238,6 @@ public class Project3 {
     }
     return null;
   }
-
   /**
    * Main program that parses the command line, verifies input creates a
    * <code>Project3</code>, creates an <code>Appointment</code>
@@ -374,8 +393,10 @@ public class Project3 {
         PrettyPrinter prettyDumper;
         File prettytextFile = new File(prettyFileLocation);
 
-        appointmentBook = new AppointmentBook(owner);
-        appointmentBook.addAppointment(appointmentToAdd);
+        if(fileLocation == null){
+          appointmentBook = new AppointmentBook(owner);
+          appointmentBook.addAppointment(appointmentToAdd);
+        }
 
         prettyDumper = new PrettyPrinter(new FileWriter(prettytextFile));
         prettyDumper.dump(appointmentBook);

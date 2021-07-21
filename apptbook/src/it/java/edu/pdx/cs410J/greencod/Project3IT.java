@@ -238,6 +238,11 @@ class Project3IT extends InvokeMainTestCase {
     MainMethodResult result = invokeMain(Project3.class, "-print", "-pretty", "-", "Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "pm");
     assertThat(result.getTextWrittenToStandardOut(), containsString("This Appointment Book belongs to Cody, The Coolest Cat in the Cave"));
   }
+  @Test
+  void testPrettyPrinterReadFromFileFirst() {
+    MainMethodResult result = invokeMain(Project3.class, "-print", "-textFile", "Cody", "-pretty", "Pretty", "Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "pm");
+    assertThat(result.getTextWrittenToStandardOut(), containsString("Head Transplant Consultation from 7/21/92, 11:00 AM until 7/21/92, 11:11 PM"));
+  }
 
 
 }

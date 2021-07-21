@@ -20,7 +20,7 @@ public class PrettyPrinter implements AppointmentBookDumper<AppointmentBook> {
             return null;
         }
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("This Appointment Book belongs to " + b.getOwnerName() + ", The Coolest Cat in the Cave\n");
+        stringBuilder.append("****This Appointment Book belongs to " + b.getOwnerName() + ", The Coolest Cat in the Cave****\n\n\n");
         if(b.getAppointments() != null) {
             Appointment[] appointments = b.getAppointments().toArray(new Appointment[0]);
             int count = 1;
@@ -29,6 +29,7 @@ public class PrettyPrinter implements AppointmentBookDumper<AppointmentBook> {
                 stringBuilder.append("The appointment, which is: " + appointment.getDescription() + "\n");
                 stringBuilder.append("will begin at precisely " + DateFormat.getDateInstance(DateFormat.LONG).format(appointment.getBeginTime()));
                 stringBuilder.append(", and will go until exactly " + DateFormat.getDateInstance(DateFormat.LONG).format(appointment.getEndTime()) + "\n\n");
+                ++count;
             };
         } else {
             stringBuilder.append("Nothing to report for today, you get out there and make a difference!!!\n\n");
@@ -43,7 +44,7 @@ public class PrettyPrinter implements AppointmentBookDumper<AppointmentBook> {
             return;
         }
 
-        w.write("This Appointment Book belongs to " + b.getOwnerName() + ", The Coolest Cat in the Cave\n");
+        w.write("****This Appointment Book belongs to " + b.getOwnerName() + ", The Coolest Cat in the Cave****\n\n\n");
         if(b.getAppointments() != null) {
             Appointment[] appointments = b.getAppointments().toArray(new Appointment[0]);
             int count = 1;
@@ -53,6 +54,7 @@ public class PrettyPrinter implements AppointmentBookDumper<AppointmentBook> {
                 w.write("will begin at precisely " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT).format(appointment.getBeginTime()));
                 w.write(", and will go until exactly " + DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT).format(appointment.getEndTime()) + "\n");
                 w.write("lasting exactly " + Project3.getMinutes(appointment.getBeginTime(), appointment.getEndTime()) + " minutes\n\n");
+                ++count;
             };
         } else {
             w.write("Nothing to report for today, you get out there and make a difference!!!\n\n");
