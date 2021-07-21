@@ -1,19 +1,30 @@
 package edu.pdx.cs410J.greencod;
 
 import edu.pdx.cs410J.AppointmentBookDumper;
-
-import javax.imageio.IIOException;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DateFormat;
 
+/**
+ * This class represents an <code>PrettyPrinter</code>.
+ */
 public class PrettyPrinter implements AppointmentBookDumper<AppointmentBook> {
     private Writer w;
-
+    /**
+     * Creates a new <code>PrettyPrinter</code>
+     * @param w
+     *      The Writer for PrettyPrinter
+     */
     public PrettyPrinter(Writer w) {
         this.w = w;
     }
 
+    /**
+     * Prints a pretty print format to standard out
+     * @param b
+     * AppointmentBook being written
+     * @return
+     */
     public static StringBuilder prettyPrint(AppointmentBook b) {
         if(b.getOwnerName() == null){
             System.out.println(Project3.NO_OWNER_PROVIDED);
@@ -37,7 +48,12 @@ public class PrettyPrinter implements AppointmentBookDumper<AppointmentBook> {
         stringBuilder.append("\"\"\"You miss 100% of the shots you don't take\"\n\t-Wayne Gretzky\"\n\t\t-Michael Scott\"\n\t\t\t-Cody Green");
         return stringBuilder;
     }
-
+    /**
+     * Prints a pretty print format to given file
+     * @param b
+     * AppointmentBook being written
+     * @return
+     */
     public void dump(AppointmentBook b) throws IOException {
         if(b.getOwnerName() == null){
             System.out.println(Project3.NO_OWNER_PROVIDED);

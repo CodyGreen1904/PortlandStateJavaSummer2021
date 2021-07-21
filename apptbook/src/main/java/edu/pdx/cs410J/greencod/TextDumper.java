@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * This class represents an <code>TextDumper</code>.
+ * This class represents a <code>TextDumper</code>.
  */
 
 public class TextDumper implements AppointmentBookDumper<AppointmentBook> {

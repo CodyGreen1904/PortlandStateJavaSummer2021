@@ -12,7 +12,7 @@ import java.util.Collections;
  */
 public class AppointmentBook extends AbstractAppointmentBook<Appointment>{
 
-    private String owner;
+    private final String owner;
 
     private ArrayList<Appointment> appointments;
 
@@ -45,7 +45,6 @@ public class AppointmentBook extends AbstractAppointmentBook<Appointment>{
      * Returns the <code>String</code> with the name of
      *  the <code>owner</code>
      */
-
     public  String getOwnerName(){
         return owner;
     }
@@ -67,6 +66,9 @@ public class AppointmentBook extends AbstractAppointmentBook<Appointment>{
         Collections.sort(appointments);
     }
 
+    /**
+     * Sorts the appointments array based on <code>Appointment</code> overloaded compareTo function
+     */
     public void sortAppointments(){
         Collections.sort(appointments);
     }

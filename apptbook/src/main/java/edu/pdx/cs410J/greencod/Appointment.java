@@ -43,6 +43,13 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
     this.end = end;
     this.deetz = deetz;
   }
+
+  /**
+   * Overrides the compare to method for Collections
+   * @param compare
+   *  The appointment being compared to the current appointment
+   * @return
+   */
   @Override
   public int compareTo(Appointment compare) {
     if(this.begin == compare.getBeginTime()){
@@ -61,20 +68,39 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
     return description;
   }
 
+  /**
+   * Returns the begin Date member
+   * @return
+   */
   public Date getBeginTime() {
     return begin;
   }
 
+  /**
+   * Returns the end Date member
+   * @return
+   */
   public Date getEndTime() {
     return end;
   }
 
+  /**
+   * Returns the deetz String Array member
+   * @return
+   */
   public String[] getDeetz() {return deetz;}
 
+  /**
+   * Returns the formatted Date String for begin
+   * @return
+   */
   public String getBeginTimeString() {
     return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(begin);
   }
-
+  /**
+   * Returns the formatted Date String for end
+   * @return
+   */
   public String getEndTimeString() {
     return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(end);
   }

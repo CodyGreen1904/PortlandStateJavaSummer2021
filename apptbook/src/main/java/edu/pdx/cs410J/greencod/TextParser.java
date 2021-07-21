@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Date;
 
+/**
+ * This class represents a <code>TextParser</code>
+ */
 public class TextParser implements AppointmentBookParser<AppointmentBook> {
 
     private BufferedReader r;
