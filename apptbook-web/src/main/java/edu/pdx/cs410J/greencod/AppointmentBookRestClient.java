@@ -1,9 +1,10 @@
 package edu.pdx.cs410J.greencod;
-
 import com.google.common.annotations.VisibleForTesting;
+import edu.pdx.cs410J.ParserException;
 import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Map;
 
 import static java.net.HttpURLConnection.HTTP_OK;
@@ -39,26 +40,27 @@ public class AppointmentBookRestClient extends HttpRequestHelper {
   }
 
   /**
-   * Returns the definition for the given word
+   * Returns the definition for the given owner
    */
-  public String getDefinition(String word) throws IOException {
-    Response response = get(this.url, Map.of("word", word));
+  public AppointmentBook getAppointments(String owner) throws IOException, ParserException {
+    Response response = get(this.url, Map.of("owner", owner));
     throwExceptionIfNotOkayHttpStatus(response);
-    String content = response.getContent();
-    return Messages.parseDictionaryEntry(content).getValue();
+    String text = response.getContent();
+    TextParser parser = new TextParser(new StringReader(text));
+    return parser.parse();
   }
 
-  public void addDictionaryEntry(String word, String definition) throws IOException {
-    Response response = postToMyURL(Map.of("word", word, "definition", definition));
+  public void createAppointment(String owner, String description) throws IOException {
+    Response response = postToMyURL(Map.of("owner", owner, "description", description));
     throwExceptionIfNotOkayHttpStatus(response);
   }
 
   @VisibleForTesting
-  Response postToMyURL(Map<String, String> dictionaryEntries) throws IOException {
-    return post(this.url, dictionaryEntries);
+  Response postToMyURL(Map<String, String> appointmentInfo) throws IOException {
+    return post(this.url, appointmentInfo);
   }
 
-  public void removeAllDictionaryEntries() throws IOException {
+  public void removeAllAppointmentBooks() throws IOException {
     Response response = delete(this.url, Map.of());
     throwExceptionIfNotOkayHttpStatus(response);
   }
