@@ -388,7 +388,8 @@ public class Project4 {
 
             } else {
                 // Create a new appointment
-                client.createAppointment(owner, description);
+                Appointment appointment = new Appointment(owner, description, beginD, endD, deetz);
+                client.createAppointment(owner, appointment);
             }
 
         } catch (IOException | ParserException ex ) {
