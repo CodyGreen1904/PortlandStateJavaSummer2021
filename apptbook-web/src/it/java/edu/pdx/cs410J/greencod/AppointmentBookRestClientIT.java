@@ -8,8 +8,10 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Date;
 import java.util.Map;
 
+import static edu.pdx.cs410J.greencod.Project4.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -36,8 +38,28 @@ class AppointmentBookRestClientIT {
   void test2CreateAppointmentBookWithOneAppointment() throws IOException, ParserException {
     AppointmentBookRestClient client = newAppointmentBookRestClient();
     String owner = "Dave";
-    String description = "Teach more Java";
-    client.createAppointment(owner, description);
+    String description = "Teach Java";
+    String beginDate = "07/21/1992";
+    String beginTime = "11:11";
+    String beginPeriod = "am";
+    String endDate = "07/21/1992";
+    String endTime = "11:11";
+    String endPeriod = "am";
+
+    StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
+
+    Date beginD = sDateFormatter(dateString);
+    dateString = sToSb(endDate, endTime, endPeriod);
+    Date endD = sDateFormatter(dateString);
+    if(beginD.compareTo(endD) >= 0){
+      System.err.println(BEGIN_AFTER_END);
+      System.exit(1);
+    }
+
+    String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+
+    Appointment appointmentToAdd = new Appointment(owner, description, beginD, endD, deetz);
+    client.createAppointment(owner, appointmentToAdd.toString());
 
     AppointmentBook book = client.getAppointments(owner);
     assertThat(book.getOwnerName(), equalTo(owner));

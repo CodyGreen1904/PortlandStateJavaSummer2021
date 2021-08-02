@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Date;
 
+import static edu.pdx.cs410J.greencod.Project4.sDateFormatter;
+import static edu.pdx.cs410J.greencod.Project4.sToSb;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -15,8 +18,22 @@ public class AppointmentBookTest {
     @Test
     void appointmentBookCanBeDumpedAndParsed() throws IOException, ParserException {
         AppointmentBook book1 = new AppointmentBook("Owner");
-        String description = "Description";
-        book1.addAppointment(new Appointment(description));
+        String owner = "Dave";
+        String description = "Teach Java";
+        String beginDate = "07/21/1992";
+        String beginTime = "11:11";
+        String beginPeriod = "am";
+        String endDate = "07/21/1992";
+        String endTime = "11:11";
+        String endPeriod = "am";
+
+        StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
+
+        Date beginD = sDateFormatter(dateString);
+        dateString = sToSb(endDate, endTime, endPeriod);
+        Date endD = sDateFormatter(dateString);
+        String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+        book1.addAppointment(new Appointment(owner, description, beginD, endD, deetz));
 
         StringWriter sw = new StringWriter();
         TextDumper dumper = new TextDumper(sw);

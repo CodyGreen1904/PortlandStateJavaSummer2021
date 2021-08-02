@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static edu.pdx.cs410J.greencod.Project4.*;
 
 /**
  * This servlet ultimately provides a REST API for working with an
@@ -21,6 +24,13 @@ public class AppointmentBookServlet extends HttpServlet
 {
     static final String OWNER_PARAMETER = "owner";
     static final String DESCRIPTION_PARAMETER = "description";
+    private static final String BEGINDATE_PARAMETER = "beginDate";
+    private static final String BEGINTIME_PARAMETER = "beginTime";
+    private static final String BEGINPERIOD_PARAMETER = "beginPeriod";
+    private static final String ENDDATE_PARAMETER = "endDate";
+    private static final String ENDTIME_PARAMETER = "endTime";
+    private static final String ENDPERIOD_PARAMETER = "endPeriod";
+    private static final String ENDBEFOREBEGIN_PARAMETER = "APPT ENDS BEFORE BEGINNING";
 
     private final Map<String, AppointmentBook> books = new HashMap<>();
 
@@ -66,12 +76,58 @@ public class AppointmentBookServlet extends HttpServlet
             return;
         }
 
+        String beginDate = getParameter(BEGINDATE_PARAMETER, request );
+        if ( beginDate == null) {
+            missingRequiredParameter( response, BEGINDATE_PARAMETER);
+            return;
+        }
+        String beginTime = getParameter(BEGINTIME_PARAMETER, request );
+        if ( beginTime == null) {
+            missingRequiredParameter( response, BEGINTIME_PARAMETER);
+            return;
+        }
+        String beginPeriod = getParameter(BEGINPERIOD_PARAMETER, request );
+        if ( beginPeriod == null) {
+            missingRequiredParameter( response, BEGINPERIOD_PARAMETER);
+            return;
+        }
+        String endDate = getParameter(ENDDATE_PARAMETER, request );
+        if ( endDate == null) {
+            missingRequiredParameter( response, ENDDATE_PARAMETER);
+            return;
+        }
+        String endTime = getParameter(ENDTIME_PARAMETER, request );
+        if ( endTime == null) {
+            missingRequiredParameter( response, ENDTIME_PARAMETER);
+            return;
+        }
+        String endPeriod = getParameter(ENDPERIOD_PARAMETER, request );
+        if ( endPeriod == null) {
+            missingRequiredParameter( response, ENDPERIOD_PARAMETER);
+            return;
+        }
+
         AppointmentBook book = this.books.get(owner);
         if (book == null) {
             book = createAppointmentBook(owner);
         }
-        Appointment appointment = new Appointment(description);
+        StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
+
+        Date beginD = sDateFormatter(dateString);
+        dateString = sToSb(endDate, endTime, endPeriod);
+        Date endD = sDateFormatter(dateString);
+
+        if(beginD.compareTo(endD) >= 0){
+            missingRequiredParameter( response, ENDBEFOREBEGIN_PARAMETER);
+            System.exit(1);
+        }
+
+        String[] deetz = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+        Appointment appointment = new Appointment(owner, description, beginD, endD, deetz);
         book.addAppointment(appointment);
+        PrintWriter pw = response.getWriter();
+        pw.println(Messages.definedWordAs(owner, description));
+        pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK);
 
@@ -113,10 +169,9 @@ public class AppointmentBookServlet extends HttpServlet
 
         if (book == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-
         } else {
             PrintWriter pw = response.getWriter();
-            TextDumper dumper = new TextDumper(pw);
+            PrettyPrinter dumper = new PrettyPrinter(pw);
             dumper.dump(book);
             pw.flush();
 

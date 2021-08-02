@@ -9,8 +9,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
+import static edu.pdx.cs410J.greencod.Project4.sDateFormatter;
+import static edu.pdx.cs410J.greencod.Project4.sToSb;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -25,10 +28,23 @@ public class AppointmentBookServletTest {
   void gettingAppointmentBookReturnsTextFormat() throws ServletException, IOException {
     String owner = "Dave";
     String description = "Teach Java";
+    String beginDate = "07/21/1992";
+    String beginTime = "11:11";
+    String beginPeriod = "am";
+    String endDate = "07/21/1992";
+    String endTime = "11:11";
+    String endPeriod = "am";
+
+    StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
+
+    Date beginD = sDateFormatter(dateString);
+    dateString = sToSb(endDate, endTime, endPeriod);
+    Date endD = sDateFormatter(dateString);
+    String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
 
     AppointmentBookServlet servlet = new AppointmentBookServlet();
     AppointmentBook book = servlet.createAppointmentBook(owner);
-    book.addAppointment(new Appointment(description));
+    book.addAppointment(new Appointment(owner, description, beginD, endD, deetz));
 
     Map<String, String> queryParams = Map.of("owner", owner);
     StringWriter sw = invokeServletMethod(queryParams, servlet::doGet);
@@ -59,6 +75,19 @@ public class AppointmentBookServletTest {
 
     String owner = "Dave";
     String description = "Teach Java";
+    String beginDate = "07/21/1992";
+    String beginTime = "11:11";
+    String beginPeriod = "am";
+    String endDate = "07/21/1992";
+    String endTime = "11:11";
+    String endPeriod = "am";
+
+    StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
+
+    Date beginD = sDateFormatter(dateString);
+    dateString = sToSb(endDate, endTime, endPeriod);
+    Date endD = sDateFormatter(dateString);
+    String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
 
     invokeServletMethod(Map.of("owner", owner, "description", description), servlet::doPost);
 

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
+import static edu.pdx.cs410J.greencod.Project4.sToSb;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -53,12 +54,20 @@ class Project4IT extends InvokeMainTestCase {
     @Test
     void test4AddAppointment() {
         String owner = "Dave";
-        String description = "Still teaching Java";
+        String description = "Teach Java";
+        String beginDate = "07/21/1992";
+        String beginTime = "11:11";
+        String beginPeriod = "am";
+        String endDate = "07/21/1992";
+        String endTime = "11:11";
+        String endPeriod = "pm";
 
-        MainMethodResult result = invokeMain( Project4.class, HOSTNAME, PORT, owner, description );
+
+
+        MainMethodResult result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT, owner, description, beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod);
         assertThat(result.getTextWrittenToStandardError(), result.getExitCode(), equalTo(0));
 
-        result = invokeMain( Project4.class, HOSTNAME, PORT, owner );
+        result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT, owner, description, beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod);
         String out = result.getTextWrittenToStandardOut();
         assertThat(out, out, containsString(owner));
         assertThat(out, out, containsString(description));

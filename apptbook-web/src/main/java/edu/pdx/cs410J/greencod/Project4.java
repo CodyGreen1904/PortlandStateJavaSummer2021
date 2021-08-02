@@ -256,10 +256,12 @@ public class Project4 {
         boolean printFlag = false;
         boolean hostFlag = false;
         boolean portFlag = false;
+        Date beginD = null;
+        Date endD = null;
 
         Project4 p = new Project4();
-        for (String arg : args) {
-            if (hostFlag) {
+        for(String arg : args) {
+            if(hostFlag) {
                 hostName = arg;
                 hostFlag = false;
                 continue;
@@ -269,42 +271,49 @@ public class Project4 {
                 portFlag = false;
                 continue;
             }
-            if (arg.startsWith("-")) {
-                if (arg.equals("-README")) {
+            if(arg.startsWith("-")){
+                if(arg.equals("-README")) {
                     p.readMe();
                     System.exit(0);
                 }
-                if (arg.equals("-print")) {
+                if(arg.equals("-print")) {
                     printFlag = true;
                     continue;
-                } else if (arg.equals("-host")) {
+                }
+                if(arg.equals("-host")) {
                     hostFlag = true;
                     continue;
-                } else if (arg.equals("-port")) {
+                }
+                if(arg.equals("-port")) {
                     portFlag = true;
                     continue;
                 }
-                if (owner == null) {
-                    owner = arg;
-                } else if (description == null) {
-                    description = arg;
-                } else if (beginDate == null) {
-                    beginDate = validateDate(arg);
-                } else if (beginTime == null) {
-                    beginTime = validateTime(arg);
-                } else if (beginPeriod == null) {
-                    beginPeriod = validatePeriod(arg);
-                } else if (endDate == null) {
-                    endDate = validateDate(arg);
-                } else if (endTime == null) {
-                    endTime = validateTime(arg);
-                } else if (endPeriod == null) {
-                    endPeriod = validatePeriod(arg);
-                } else {
-                    System.err.println(TOO_MANY_ARGUMENTS);
+
+                else{
+                    System.err.println(UNKNOWN_COMMAND_LINE_ARGUMENT);
                     System.err.println(USAGE_MESSAGE);
                     System.exit(1);
                 }
+            } else if(owner == null) {
+                owner = arg;
+            } else if(description == null) {
+                description = arg;
+            } else if(beginDate == null) {
+                beginDate = validateDate(arg);
+            } else if(beginTime == null) {
+                beginTime = validateTime(arg);
+            } else if(beginPeriod == null) {
+                beginPeriod = validatePeriod(arg);
+            } else if(endDate == null) {
+                endDate = validateDate(arg);
+            } else if(endTime == null) {
+                endTime = validateTime(arg);
+            } else if(endPeriod == null) {
+                endPeriod = validatePeriod(arg);
+            } else {
+                System.err.println(TOO_MANY_ARGUMENTS);
+                System.err.println(USAGE_MESSAGE);
+                System.exit(1);
             }
         }
 
@@ -319,6 +328,27 @@ public class Project4 {
             System.err.println(MISSING_COMMAND_LINE_ARGUMENTS);
             System.err.println(USAGE_MESSAGE);
             System.exit(1);
+        } else if(description == null) {
+            System.err.println(MISSING_DESCRIPTION);
+            System.exit(1);
+        } else if(beginDate == null) {
+            System.err.println(MISSING_BEGIN_DATE);
+            System.exit(1);
+        } else if(beginTime == null) {
+            System.err.println(MISSING_BEGIN_TIME);
+            System.exit(1);
+        } else if(beginPeriod == null){
+            System.err.println(MISSING_BEGIN_PERIOD);
+            System.exit(1);
+        } else if(endDate == null) {
+            System.err.println(MISSING_END_DATE);
+            System.exit(1);
+        } else if(endTime == null) {
+            System.err.println(MISSING_END_TIME);
+            System.exit(1);
+        } else if(endPeriod == null) {
+            System.err.println(MISSING_END_PERIOD);
+            System.exit(1);
         }
 
         int port;
@@ -329,6 +359,20 @@ public class Project4 {
             usage("Port \"" + portString + "\" must be an integer");
             return;
         }
+        StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
+        String b = dateString.toString();
+
+        beginD = sDateFormatter(dateString);
+        dateString = sToSb(endDate, endTime, endPeriod);
+        String e = dateString.toString();
+        endD = sDateFormatter(dateString);
+
+        if(beginD.compareTo(endD) >= 0){
+            System.err.println(BEGIN_AFTER_END);
+            System.exit(1);
+        }
+
+        String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
 
         AppointmentBookRestClient client = new AppointmentBookRestClient(hostName, port);
 
@@ -373,18 +417,7 @@ public class Project4 {
         PrintStream err = System.err;
         err.println("** " + message);
         err.println();
-        err.println("usage: java Project4 host port [word] [definition]");
-        err.println("  host         Host of web server");
-        err.println("  port         Port of web server");
-        err.println("  word         Word in dictionary");
-        err.println("  definition   Definition of word");
-        err.println();
-        err.println("This simple program posts words and their definitions");
-        err.println("to the server.");
-        err.println("If no definition is specified, then the word's definition");
-        err.println("is printed.");
-        err.println("If no word is specified, all dictionary entries are printed");
-        err.println();
+        err.println(USAGE_MESSAGE);
 
         System.exit(1);
     }

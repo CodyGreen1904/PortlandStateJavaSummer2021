@@ -27,9 +27,9 @@ public class Messages
         return String.format("The required parameter \"%s\" is missing", parameterName);
     }
 
-    public static String definedWordAs(String word, String definition )
+    public static String definedWordAs(String owner, String  description)
     {
-        return String.format( "Defined %s as %s", word, definition );
+        return String.format( "Added %s to %s's AppointmentBook", owner, description );
     }
 
     public static String allDictionaryEntriesDeleted() {

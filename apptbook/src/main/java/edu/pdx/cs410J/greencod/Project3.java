@@ -358,7 +358,6 @@ public class Project3 {
     beginD = sDateFormatter(dateString);
     dateString = sToSb(endDate, endTime, endPeriod);
     endD = sDateFormatter(dateString);
-
     if(beginD.compareTo(endD) >= 0){
       System.err.println(BEGIN_AFTER_END);
       System.exit(1);
@@ -367,6 +366,7 @@ public class Project3 {
     String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
 
     Appointment appointmentToAdd = new Appointment(owner, description, beginD, endD, deetz);
+
     AppointmentBook appointmentBook = null;
     if(fileLocation != null || prettyFileLocation != null) {
       if (fileLocation != null) {
