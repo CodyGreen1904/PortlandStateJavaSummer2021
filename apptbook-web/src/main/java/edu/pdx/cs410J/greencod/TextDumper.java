@@ -3,6 +3,7 @@ package edu.pdx.cs410J.greencod;
 import edu.pdx.cs410J.AppointmentBookDumper;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 
 /**
@@ -28,21 +29,22 @@ public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
      * @throws IOException
      */
     public void dump(AppointmentBook b) throws IOException {
+        PrintWriter pw = new PrintWriter(this.w);
         if(b.getOwnerName() == null){
             System.out.println(Project4.NO_OWNER_PROVIDED);
             return;
         }
-        w.write(b.getOwnerName() + "\n");
+        pw.println(b.getOwnerName());
         if(b.getAppointments() != null) {
             Appointment[] appointments = b.getAppointments().toArray(new Appointment[0]);
             for(Appointment appointment : appointments) {
-                w.write(appointment.getDescription() + "\n");
+                pw.println(appointment.getDescription() + "\n");
                 for(String d : appointment.getDeetz()){
-                    w.write(d + "\n");
+                    pw.println(d + "\n");
                 }
             }
         }
 
-        w.flush();
+        pw.flush();
     }
 }
