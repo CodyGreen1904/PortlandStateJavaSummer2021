@@ -59,7 +59,7 @@ class AppointmentBookRestClientIT {
     String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
 
     Appointment appointmentToAdd = new Appointment(owner, description, beginD, endD, deetz);
-    client.createAppointment(owner, appointmentToAdd.toString());
+    client.createAppointment(owner, appointmentToAdd);
 
     AppointmentBook book = client.getAppointments(owner);
     assertThat(book.getOwnerName(), equalTo(owner));

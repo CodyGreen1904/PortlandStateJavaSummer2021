@@ -51,9 +51,16 @@ public class AppointmentBookRestClient extends HttpRequestHelper {
     return parser.parse();
   }
 
-  public void createAppointment(String owner, String description) throws IOException {
-    Response response = postToMyURL(Map.of("owner", owner, "description", description));
+  public void createAppointment(String owner, Appointment appointment) throws IOException {
+    String beginAsString = formatDateForHttpRequest(appointment.getBeginTime());
+    String endAsString = formatDateForHttpRequest(appointment.getEndTime());
+
+    Response response = postToMyURL(Map.of("owner", owner, "description", appointment.getDescription(), "begin", beginAsString, "end", endAsString));
     throwExceptionIfNotOkayHttpStatus(response);
+  }
+
+  private String formatDateForHttpRequest(Date beginTime) {
+    throw new UnsupportedOperationException("You can implement this");
   }
 
   @VisibleForTesting
