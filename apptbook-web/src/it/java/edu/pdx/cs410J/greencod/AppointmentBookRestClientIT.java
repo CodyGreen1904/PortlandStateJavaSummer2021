@@ -44,7 +44,7 @@ class AppointmentBookRestClientIT {
     String beginPeriod = "am";
     String endDate = "07/21/1992";
     String endTime = "11:11";
-    String endPeriod = "am";
+    String endPeriod = "pm";
 
     StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
 
@@ -56,10 +56,10 @@ class AppointmentBookRestClientIT {
       System.exit(1);
     }
 
-    String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+    String[] deetz = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
 
     Appointment appointmentToAdd = new Appointment(owner, description, beginD, endD, deetz);
-    client.createAppointment(owner, appointmentToAdd.toString());
+    client.createAppointment(owner, appointmentToAdd);
 
     AppointmentBook book = client.getAppointments(owner);
     assertThat(book.getOwnerName(), equalTo(owner));

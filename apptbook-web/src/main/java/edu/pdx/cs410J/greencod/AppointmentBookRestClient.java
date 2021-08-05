@@ -5,6 +5,8 @@ import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
@@ -53,16 +55,15 @@ public class AppointmentBookRestClient extends HttpRequestHelper {
 
   public void createAppointment(String owner, Appointment appointment) throws IOException {
 
-    String beginAsString = formatDateForHttpRequest(appointment.getDeetz()[0], appointment.getDeetz()[1], appointment.getDeetz()[2]);
-    String endAsString = formatDateForHttpRequest(appointment.getDeetz()[3], appointment.getDeetz()[4], appointment.getDeetz()[5]);
+    String beginAsString = formatDateForHttpRequest(appointment.getBeginTime());
+    String endAsString = formatDateForHttpRequest(appointment.getEndTime());
 
     Response response = postToMyURL(Map.of("owner", owner, "description", appointment.getDescription(), "begin", beginAsString, "end", endAsString));
     throwExceptionIfNotOkayHttpStatus(response);
   }
-  private String formatDateForHttpRequest(String oldDate, String oldTime, String oldPeriod) {
-    oldDate.replace('/', '-');
-    oldTime.replace(':', '-');
-    return (oldDate + " " + oldTime + " " + oldPeriod);
+  private String formatDateForHttpRequest(Date time) {
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+    return simpleDateFormat.format(time);
   }
 
   @VisibleForTesting

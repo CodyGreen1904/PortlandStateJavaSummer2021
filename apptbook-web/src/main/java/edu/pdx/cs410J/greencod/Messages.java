@@ -29,7 +29,7 @@ public class Messages
 
     public static String definedWordAs(String owner, String  description)
     {
-        return String.format( "Added %s to %s's AppointmentBook", owner, description );
+        return String.format( "Added %s to %s's AppointmentBook", description, owner );
     }
 
     public static String allDictionaryEntriesDeleted() {

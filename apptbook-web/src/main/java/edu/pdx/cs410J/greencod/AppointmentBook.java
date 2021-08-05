@@ -16,19 +16,6 @@ public class AppointmentBook extends AbstractAppointmentBook<Appointment>{
 
     private ArrayList<Appointment> appointments;
 
-    /**
-     * Creates a new <code>AppointmentBook</code>
-     *
-     * @param owner
-     *        The owner of the <code>AppointmentBook</code>
-     * @param appointment
-     *        The appointment being added
-     */
-    public AppointmentBook(String owner, Appointment appointment) {
-        this.owner = owner;
-        this.appointments = new ArrayList<>();
-        this.addAppointment(appointment);
-    }
 
     /**
      * Creates a new <code>AppointmentBook</code>

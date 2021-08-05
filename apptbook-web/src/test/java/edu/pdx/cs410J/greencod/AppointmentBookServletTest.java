@@ -33,7 +33,7 @@ public class AppointmentBookServletTest {
     String beginPeriod = "am";
     String endDate = "07/21/1992";
     String endTime = "11:11";
-    String endPeriod = "am";
+    String endPeriod = "pm";
 
     StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
 
@@ -75,21 +75,17 @@ public class AppointmentBookServletTest {
 
     String owner = "Dave";
     String description = "Teach Java";
-    String beginDate = "07/21/1992";
-    String beginTime = "11:11";
-    String beginPeriod = "am";
-    String endDate = "07/21/1992";
-    String endTime = "11:11";
-    String endPeriod = "am";
+    String beginDate = "07/21/1992 11:11 am";
+    String endDate = "07/21/1992 11:11 pm";
 
-    StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
 
-    Date beginD = sDateFormatter(dateString);
-    dateString = sToSb(endDate, endTime, endPeriod);
-    Date endD = sDateFormatter(dateString);
-    String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+    Date beginD = sDateFormatter(new StringBuilder(beginDate));
+    Date endD = sDateFormatter(new StringBuilder(endDate));
+    String[] splBegin = beginDate.split(" ");
+    String[] splEnd = endDate.split(" ");
+    String[] deetz = new String[] {splBegin[0], splBegin[1], splBegin[2], splEnd[0], splEnd[1], splEnd[2]};
 
-    invokeServletMethod(Map.of("owner", owner, "description", description), servlet::doPost);
+    invokeServletMethod(Map.of("owner", owner, "description", description, "begin", beginDate, "end", endDate), servlet::doPost);
 
     AppointmentBook book = servlet.getAppointmentBook(owner);
     assertThat(book, notNullValue());

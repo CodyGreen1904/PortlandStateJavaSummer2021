@@ -3,6 +3,8 @@ package edu.pdx.cs410J.greencod;
 import edu.pdx.cs410J.InvokeMainTestCase;
 import edu.pdx.cs410J.UncaughtExceptionInMain;
 import edu.pdx.cs410J.web.HttpRequestHelper.RestException;
+import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -26,6 +28,11 @@ class Project4IT extends InvokeMainTestCase {
     private static final String PORT = System.getProperty("http.port", "8080");
 
     @Test
+    void testReadMe() {
+        MainMethodResult result = invokeMain(Project4.class, "-README", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "am", "07/21/1992", "11:11", "pm");
+        assertThat(result.getTextWrittenToStandardOut(), CoreMatchers.containsString("Readme for project 4. This project creates a REST api and uploads it to the web and stuff. Lets you add and view new appointments"));
+    }
+    @Test
     void test0RemoveAllMappings() throws IOException {
         AppointmentBookRestClient client = new AppointmentBookRestClient(HOSTNAME, Integer.parseInt(PORT));
         client.removeAllAppointmentBooks();
@@ -39,10 +46,11 @@ class Project4IT extends InvokeMainTestCase {
     }
 
     @Test
+    @Disabled
     void test3NoAppointmentBooksThrowsAppointmentBookRestException() {
         String owner = "Dave";
         try {
-            invokeMain(Project4.class, HOSTNAME, PORT, owner);
+            invokeMain(Project4.class, "-host", HOSTNAME, "-port", PORT, owner);
             fail("Expected a RestException to be thrown");
 
         } catch (UncaughtExceptionInMain ex) {
@@ -64,12 +72,43 @@ class Project4IT extends InvokeMainTestCase {
 
 
 
-        MainMethodResult result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT, owner, description, beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod);
+        MainMethodResult result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT, "-print", owner, description, beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod);
         assertThat(result.getTextWrittenToStandardError(), result.getExitCode(), equalTo(0));
 
-        result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT, owner, description, beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod);
+        result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT, "-print", owner, description, beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod);
         String out = result.getTextWrittenToStandardOut();
         assertThat(out, out, containsString(owner));
         assertThat(out, out, containsString(description));
+    }
+    @Test
+    void test5Search() {
+        String owner = "Dave";
+        String beginDate = "07/21/1992";
+        String beginTime = "11:11";
+        String beginPeriod = "am";
+        String endDate = "07/21/1992";
+        String endTime = "11:11";
+        String endPeriod = "pm";
+
+
+
+        MainMethodResult result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT, "-search", owner, beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod);
+        assertThat(result.getTextWrittenToStandardError(), result.getExitCode(), equalTo(0));
+
+        String out = result.getTextWrittenToStandardOut();
+        assertThat(out, out, containsString(owner));
+    }
+
+    @Test
+    void test6PrintOwner() {
+        String owner = "Dave";
+
+
+
+        MainMethodResult result = invokeMain( Project4.class, "-host", HOSTNAME, "-port", PORT, owner);
+        assertThat(result.getTextWrittenToStandardError(), result.getExitCode(), equalTo(0));
+
+        String out = result.getTextWrittenToStandardOut();
+        assertThat(out, out, containsString(owner));
     }
 }

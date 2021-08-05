@@ -1,6 +1,7 @@
 package edu.pdx.cs410J.greencod;
 
 import edu.pdx.cs410J.ParserException;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.*;
 import java.text.ParseException;
@@ -242,7 +243,7 @@ public class Project4 {
         return null;
     }
 
-    public static void main(String... args) throws IOException{
+    public static void main(String... args) throws IOException {
         String hostName = null;
         String portString = null;
         String owner = null;
@@ -256,12 +257,13 @@ public class Project4 {
         boolean printFlag = false;
         boolean hostFlag = false;
         boolean portFlag = false;
+        boolean searchFlag = false;
         Date beginD = null;
         Date endD = null;
 
         Project4 p = new Project4();
-        for(String arg : args) {
-            if(hostFlag) {
+        for (String arg : args) {
+            if (hostFlag) {
                 hostName = arg;
                 hostFlag = false;
                 continue;
@@ -271,44 +273,46 @@ public class Project4 {
                 portFlag = false;
                 continue;
             }
-            if(arg.startsWith("-")){
-                if(arg.equals("-README")) {
+            if (arg.startsWith("-")) {
+                if (arg.equals("-README")) {
                     p.readMe();
                     System.exit(0);
                 }
-                if(arg.equals("-print")) {
+                if (arg.equals("-print")) {
                     printFlag = true;
                     continue;
                 }
-                if(arg.equals("-host")) {
+                if (arg.equals("-search")) {
+                    searchFlag = true;
+                    continue;
+                }
+                if (arg.equals("-host")) {
                     hostFlag = true;
                     continue;
                 }
-                if(arg.equals("-port")) {
+                if (arg.equals("-port")) {
                     portFlag = true;
                     continue;
-                }
-
-                else{
+                } else {
                     System.err.println(UNKNOWN_COMMAND_LINE_ARGUMENT);
                     System.err.println(USAGE_MESSAGE);
                     System.exit(1);
                 }
-            } else if(owner == null) {
+            } else if (owner == null) {
                 owner = arg;
-            } else if(description == null) {
+            } else if (description == null && !searchFlag) {
                 description = arg;
-            } else if(beginDate == null) {
+            } else if (beginDate == null) {
                 beginDate = validateDate(arg);
-            } else if(beginTime == null) {
+            } else if (beginTime == null) {
                 beginTime = validateTime(arg);
-            } else if(beginPeriod == null) {
+            } else if (beginPeriod == null) {
                 beginPeriod = validatePeriod(arg);
-            } else if(endDate == null) {
+            } else if (endDate == null) {
                 endDate = validateDate(arg);
-            } else if(endTime == null) {
+            } else if (endTime == null) {
                 endTime = validateTime(arg);
-            } else if(endPeriod == null) {
+            } else if (endPeriod == null) {
                 endPeriod = validatePeriod(arg);
             } else {
                 System.err.println(TOO_MANY_ARGUMENTS);
@@ -318,80 +322,112 @@ public class Project4 {
         }
 
         if (hostName == null) {
-            usage( MISSING_ARGS );
+            usage(MISSING_ARGS);
             return;
 
-        } else if ( portString == null) {
-            usage( "Missing port" );
+        } else if (portString == null) {
+            usage("Missing port");
             return;
-        } else if(owner == null){
+        } else if (owner == null) {
             System.err.println(MISSING_COMMAND_LINE_ARGUMENTS);
             System.err.println(USAGE_MESSAGE);
-            System.exit(1);
-        } else if(description == null) {
-            System.err.println(MISSING_DESCRIPTION);
-            System.exit(1);
-        } else if(beginDate == null) {
-            System.err.println(MISSING_BEGIN_DATE);
-            System.exit(1);
-        } else if(beginTime == null) {
-            System.err.println(MISSING_BEGIN_TIME);
-            System.exit(1);
-        } else if(beginPeriod == null){
-            System.err.println(MISSING_BEGIN_PERIOD);
-            System.exit(1);
-        } else if(endDate == null) {
-            System.err.println(MISSING_END_DATE);
-            System.exit(1);
-        } else if(endTime == null) {
-            System.err.println(MISSING_END_TIME);
-            System.exit(1);
-        } else if(endPeriod == null) {
-            System.err.println(MISSING_END_PERIOD);
             System.exit(1);
         }
 
         int port;
         try {
-            port = Integer.parseInt( portString );
+            port = Integer.parseInt(portString);
 
         } catch (NumberFormatException ex) {
             usage("Port \"" + portString + "\" must be an integer");
             return;
         }
-        StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
-        String b = dateString.toString();
 
-        beginD = sDateFormatter(dateString);
-        dateString = sToSb(endDate, endTime, endPeriod);
-        String e = dateString.toString();
-        endD = sDateFormatter(dateString);
-
-        if(beginD.compareTo(endD) >= 0){
-            System.err.println(BEGIN_AFTER_END);
-            System.exit(1);
-        }
-
-        String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
 
         AppointmentBookRestClient client = new AppointmentBookRestClient(hostName, port);
 
         try {
-            if (owner == null) {
-                usage("Missing owner");
-
-            } else if (description == null) {
+            if (description == null && !searchFlag) {
                 // Get the text of the appointment book
                 AppointmentBook book = client.getAppointments(owner);
                 PrettyPrinter pretty = new PrettyPrinter(new OutputStreamWriter(System.out));
                 pretty.dump(book);
+                System.out.println(String.format("Pretty Printed %s's AppointmentBook", owner));
+                System.exit(0);
 
-            } else {
-                // Create a new appointment
-                client.createAppointment(owner, description);
+            }
+        else if (beginDate == null && description != null) {
+            System.err.println(MISSING_BEGIN_DATE);
+            System.exit(1);
+        } else if (beginTime == null && description != null) {
+            System.err.println(MISSING_BEGIN_TIME);
+            System.exit(1);
+        } else if (beginPeriod == null && description != null) {
+            System.err.println(MISSING_BEGIN_PERIOD);
+            System.exit(1);
+        } else if (endDate == null && description != null) {
+            System.err.println(MISSING_END_DATE);
+            System.exit(1);
+        } else if (endTime == null && description != null) {
+            System.err.println(MISSING_END_TIME);
+            System.exit(1);
+        } else if (endPeriod == null && description != null) {
+            System.err.println(MISSING_END_PERIOD);
+            System.exit(1);
+        }
+        if (searchFlag) {
+            StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
+            String b = dateString.toString();
+
+            beginD = sDateFormatter(dateString);
+            dateString = sToSb(endDate, endTime, endPeriod);
+            String e = dateString.toString();
+            endD = sDateFormatter(dateString);
+
+            if (beginD.compareTo(endD) >= 0) {
+                System.err.println(BEGIN_AFTER_END);
+                System.exit(1);
             }
 
-        } catch (IOException | ParserException ex ) {
+            String deetz[] = new String[]{beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+            AppointmentBook referenceBook = client.getAppointments(owner);
+            Appointment[] appointmentsReference = referenceBook.getAppointments().toArray(new Appointment[0]);
+            AppointmentBook newBook = new AppointmentBook(owner);
+            for (Appointment i : appointmentsReference) {
+                if ((beginD.after(i.getBeginTime()) && beginD.before(i.getEndTime())) || beginD.equals(i.getBeginTime())) {
+                    newBook.addAppointment(i);
+                }
+            }
+            PrettyPrinter pretty = new PrettyPrinter(new OutputStreamWriter(System.out));
+            pretty.dump(newBook);
+            System.out.println(String.format("Pretty Printed %s's AppointmentBook in the given times", owner));
+            System.exit(0);
+
+        } else {
+            StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
+            String b = dateString.toString();
+
+            beginD = sDateFormatter(dateString);
+            dateString = sToSb(endDate, endTime, endPeriod);
+            String e = dateString.toString();
+            endD = sDateFormatter(dateString);
+
+            if (beginD.compareTo(endD) >= 0) {
+                System.err.println(BEGIN_AFTER_END);
+                System.exit(1);
+            }
+
+            String deetz[] = new String[]{beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+            Appointment appointment = new Appointment(owner, description, beginD, endD, deetz);
+            AppointmentBook book = new AppointmentBook(owner);
+            book.addAppointment(appointment);
+            client.createAppointment(owner, appointment);
+            if (printFlag) {
+                System.out.println(book);
+                System.out.println(appointment);
+            }
+        }
+    }catch (IOException | ParserException ex ) {
             error("While contacting server: " + ex);
             System.exit(1);
             return;

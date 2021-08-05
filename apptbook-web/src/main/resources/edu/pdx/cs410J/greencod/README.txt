@@ -1,1 +1,1 @@
-Readme for project 3. This project creates a REST api and uploads it to the web and stuff
+Readme for project 4. This project creates a REST api and uploads it to the web and stuff. Lets you add and view new appointments

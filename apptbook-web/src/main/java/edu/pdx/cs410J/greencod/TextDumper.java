@@ -38,9 +38,9 @@ public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
         if(b.getAppointments() != null) {
             Appointment[] appointments = b.getAppointments().toArray(new Appointment[0]);
             for(Appointment appointment : appointments) {
-                pw.println(appointment.getDescription() + "\n");
+                pw.println(appointment.getDescription());
                 for(String d : appointment.getDeetz()){
-                    pw.println(d + "\n");
+                    pw.println(d);
                 }
             }
         }

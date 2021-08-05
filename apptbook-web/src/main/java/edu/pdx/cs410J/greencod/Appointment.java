@@ -21,11 +21,6 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
 
     /**
      * Creates a new <code>Appointment</code>
-     */
-    public Appointment() {}
-
-    /**
-     * Creates a new <code>Appointment</code>
      *
      * @param owner
      *        The owner of the appointment

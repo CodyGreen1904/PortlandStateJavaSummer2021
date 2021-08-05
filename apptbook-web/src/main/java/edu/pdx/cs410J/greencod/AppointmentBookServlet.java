@@ -24,12 +24,9 @@ public class AppointmentBookServlet extends HttpServlet
 {
     static final String OWNER_PARAMETER = "owner";
     static final String DESCRIPTION_PARAMETER = "description";
-    private static final String BEGINDATE_PARAMETER = "beginDate";
-    private static final String BEGINTIME_PARAMETER = "beginTime";
-    private static final String BEGINPERIOD_PARAMETER = "beginPeriod";
-    private static final String ENDDATE_PARAMETER = "endDate";
-    private static final String ENDTIME_PARAMETER = "endTime";
-    private static final String ENDPERIOD_PARAMETER = "endPeriod";
+    private static final String BEGINDATE_PARAMETER = "begin";
+    private static final String ENDDATE_PARAMETER = "end";
+
     private static final String ENDBEFOREBEGIN_PARAMETER = "APPT ENDS BEFORE BEGINNING";
 
     private final Map<String, AppointmentBook> books = new HashMap<>();
@@ -81,29 +78,9 @@ public class AppointmentBookServlet extends HttpServlet
             missingRequiredParameter( response, BEGINDATE_PARAMETER);
             return;
         }
-        String beginTime = getParameter(BEGINTIME_PARAMETER, request );
-        if ( beginTime == null) {
-            missingRequiredParameter( response, BEGINTIME_PARAMETER);
-            return;
-        }
-        String beginPeriod = getParameter(BEGINPERIOD_PARAMETER, request );
-        if ( beginPeriod == null) {
-            missingRequiredParameter( response, BEGINPERIOD_PARAMETER);
-            return;
-        }
         String endDate = getParameter(ENDDATE_PARAMETER, request );
         if ( endDate == null) {
             missingRequiredParameter( response, ENDDATE_PARAMETER);
-            return;
-        }
-        String endTime = getParameter(ENDTIME_PARAMETER, request );
-        if ( endTime == null) {
-            missingRequiredParameter( response, ENDTIME_PARAMETER);
-            return;
-        }
-        String endPeriod = getParameter(ENDPERIOD_PARAMETER, request );
-        if ( endPeriod == null) {
-            missingRequiredParameter( response, ENDPERIOD_PARAMETER);
             return;
         }
 
@@ -111,10 +88,12 @@ public class AppointmentBookServlet extends HttpServlet
         if (book == null) {
             book = createAppointmentBook(owner);
         }
-        StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
-
+        String[] splBegin = beginDate.split(" ");
+        StringBuilder dateString = sToSb(splBegin[0], splBegin[1], splBegin[2]);
         Date beginD = sDateFormatter(dateString);
-        dateString = sToSb(endDate, endTime, endPeriod);
+
+        String[] splEnd = endDate.split(" ");
+        dateString = sToSb(splEnd[0], splEnd[1], splEnd[2]);
         Date endD = sDateFormatter(dateString);
 
         if(beginD.compareTo(endD) >= 0){
@@ -122,11 +101,11 @@ public class AppointmentBookServlet extends HttpServlet
             System.exit(1);
         }
 
-        String[] deetz = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+        String[] deetz = new String[] {splBegin[0], splBegin[1], splBegin[2], splEnd[0], splEnd[1], splEnd[2]};
         Appointment appointment = new Appointment(owner, description, beginD, endD, deetz);
         book.addAppointment(appointment);
         PrintWriter pw = response.getWriter();
-        pw.println(Messages.definedWordAs(owner, description));
+        pw.println("Added " + description + " to " + owner + "'s AppointmentBook" );
         pw.flush();
 
         response.setStatus( HttpServletResponse.SC_OK);
@@ -171,7 +150,7 @@ public class AppointmentBookServlet extends HttpServlet
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } else {
             PrintWriter pw = response.getWriter();
-            PrettyPrinter dumper = new PrettyPrinter(pw);
+            TextDumper dumper = new TextDumper(pw);
             dumper.dump(book);
             pw.flush();
 
