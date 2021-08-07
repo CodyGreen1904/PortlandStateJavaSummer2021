@@ -36,6 +36,11 @@ public class AppointmentBookRestClient extends HttpRequestHelper {
 
   /**
    * Returns all dictionary entries from the server
+   * @return
+   * returns dictionary entries]
+   * @throws IOException
+   *  throws IOException
+   *
    */
   public Map<String, String> getAllDictionaryEntries() throws IOException {
     Response response = get(this.url, Map.of());
@@ -44,6 +49,12 @@ public class AppointmentBookRestClient extends HttpRequestHelper {
 
   /**
    * Returns the definition for the given owner
+   * @param owner
+   * owner of appointment book
+   * @return
+   * returns definition
+   * @throws
+   * IOException
    */
   public AppointmentBook getAppointments(String owner) throws IOException, ParserException {
     Response response = get(this.url, Map.of("owner", owner));

@@ -30,6 +30,8 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
      *        The begin date
      * @param end
      *        The end date
+     * @param deetz
+     *        Array of split information from appointment
      */
     public Appointment(String owner, String description, Date begin, Date end, String deetz[]){
         this.owner = owner;
@@ -44,6 +46,7 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
      * @param compare
      *  The appointment being compared to the current appointment
      * @return
+     * returns int with info for comparison
      */
     @Override
     public int compareTo(Appointment compare) {
@@ -57,6 +60,8 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
     }
     /**
      * Returns the <code>String</code> <code>description</code>
+     * @return
+     *  returns description
      */
     @Override
     public String getDescription() {
@@ -66,6 +71,7 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
     /**
      * Returns the begin Date member
      * @return
+     * returns begin date
      */
     public Date getBeginTime() {
         return begin;
@@ -74,6 +80,7 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
     /**
      * Returns the end Date member
      * @return
+     * returns end date
      */
     public Date getEndTime() {
         return end;
@@ -82,12 +89,14 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
     /**
      * Returns the deetz String Array member
      * @return
+     * returns array of al details in appointment
      */
     public String[] getDeetz() {return deetz;}
 
     /**
      * Returns the formatted Date String for begin
      * @return
+     * returns begin date in string format
      */
     public String getBeginTimeString() {
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(begin);
@@ -95,6 +104,7 @@ public class Appointment extends AbstractAppointment implements Comparable<Appoi
     /**
      * Returns the formatted Date String for end
      * @return
+     * returns end date in string format
      */
     public String getEndTimeString() {
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(end);
