@@ -27,11 +27,6 @@ public class Messages
         return String.format("The required parameter \"%s\" is missing", parameterName);
     }
 
-    public static String definedWordAs(String owner, String  description)
-    {
-        return String.format( "Added %s to %s's AppointmentBook", description, owner );
-    }
-
     public static String allDictionaryEntriesDeleted() {
         return "All dictionary entries have been deleted";
     }
@@ -81,7 +76,12 @@ public class Messages
         for (int i = 1; i < lines.length; i++) {
             String line = lines[i];
             Map.Entry<String, String> entry = parseDictionaryEntry(line);
-            map.put(entry.getKey(), entry.getValue());
+            try {
+                map.put(entry.getKey(), entry.getValue());
+            } catch (NullPointerException e){
+                System.out.println("Key not real (line 82 messages)");
+            }
+
         }
 
         return map;

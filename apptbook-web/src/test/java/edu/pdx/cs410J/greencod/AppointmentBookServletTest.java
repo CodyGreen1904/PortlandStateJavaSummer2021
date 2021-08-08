@@ -16,6 +16,7 @@ import static edu.pdx.cs410J.greencod.Project4.sDateFormatter;
 import static edu.pdx.cs410J.greencod.Project4.sToSb;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
 /**
@@ -78,12 +79,8 @@ public class AppointmentBookServletTest {
     String beginDate = "07/21/1992 11:11 am";
     String endDate = "07/21/1992 11:11 pm";
 
-
-    Date beginD = sDateFormatter(new StringBuilder(beginDate));
-    Date endD = sDateFormatter(new StringBuilder(endDate));
     String[] splBegin = beginDate.split(" ");
     String[] splEnd = endDate.split(" ");
-    String[] deetz = new String[] {splBegin[0], splBegin[1], splBegin[2], splEnd[0], splEnd[1], splEnd[2]};
 
     invokeServletMethod(Map.of("owner", owner, "description", description, "begin", beginDate, "end", endDate), servlet::doPost);
 
@@ -97,6 +94,43 @@ public class AppointmentBookServletTest {
     Appointment appointment = appointments.iterator().next();
     assertThat(appointment.getDescription(), equalTo(description));
 
+  }
+  @Test
+  void searchAppointmentBook() throws ServletException, IOException {
+    AppointmentBookServlet servlet = new AppointmentBookServlet();
+
+    String owner = "Dave";
+    String description = "Teach Java";
+    String beginDate = "07/21/1992 11:11 am";
+    String endDate = "07/21/1992 11:11 pm";
+
+    invokeServletMethod(Map.of("owner", owner, "description", description, "begin", beginDate, "end", endDate), servlet::doPost);
+    invokeServletMethod(Map.of("owner", owner, "description", description, "start", beginDate, "end", endDate), servlet::doGet);
+
+    AppointmentBook book = servlet.getAppointmentBook(owner);
+    assertThat(book, notNullValue());
+    assertThat(book.getOwnerName(), equalTo(owner));
+
+    Collection<Appointment> appointments = book.getAppointments();
+    assertThat(appointments, hasSize(1));
+
+    Appointment appointment = appointments.iterator().next();
+    assertThat(appointment.getDescription(), equalTo(description));
+
+  }
+  @Test
+  void deleteAppointmentBook() throws ServletException, IOException {
+    AppointmentBookServlet servlet = new AppointmentBookServlet();
+
+    String owner = "Dave";
+    String description = "Teach Java";
+    String beginDate = "07/21/1992 11:11 am";
+    String endDate = "07/21/1992 11:11 pm";
+
+    invokeServletMethod(Map.of("owner", owner, "description", description, "begin", beginDate, "end", endDate), servlet::doPost);
+    invokeServletMethod(Map.of("owner", owner, "description", description, "start", beginDate, "end", endDate), servlet::doDelete);
+
+    assertNull(servlet.getAppointmentBook(owner));
   }
 
   private interface ServletMethodInvoker {

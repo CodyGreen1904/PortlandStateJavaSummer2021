@@ -26,6 +26,7 @@ public class AppointmentBookServlet extends HttpServlet
     static final String DESCRIPTION_PARAMETER = "description";
     private static final String BEGINDATE_PARAMETER = "begin";
     private static final String ENDDATE_PARAMETER = "end";
+    private static final String START_PARAMETER = "start";
 
     private static final String ENDBEFOREBEGIN_PARAMETER = "APPT ENDS BEFORE BEGINNING";
 
@@ -43,11 +44,19 @@ public class AppointmentBookServlet extends HttpServlet
         response.setContentType( "text/plain" );
 
         String owner = getParameter(OWNER_PARAMETER, request );
+        String start = getParameter(START_PARAMETER, request);
         if (owner == null) {
             missingRequiredParameter(response, OWNER_PARAMETER);
 
-        } else {
-            writeAppointmentBook(owner, response);
+        }
+        if(start != null){
+            String end = getParameter(ENDDATE_PARAMETER, request);
+            searchAppointmentBook(owner, start, end, response);
+        }
+        else {
+            {
+                writeAppointmentBook(owner, response);
+            }
         }
     }
 
@@ -156,6 +165,30 @@ public class AppointmentBookServlet extends HttpServlet
 
             response.setStatus(HttpServletResponse.SC_OK);
         }
+    }
+    private void searchAppointmentBook(String owner, String start, String end, HttpServletResponse response) throws IOException {
+        AppointmentBook referenceBook = this.books.get(owner);
+        if(referenceBook == null){
+            PrintWriter pw = response.getWriter();
+            pw.println("That owner doesn't have a book yet" );
+            pw.flush();
+        }
+        else{
+            Date beginD = sDateFormatter(new StringBuilder(start));
+            AppointmentBook newBook = new AppointmentBook(owner);
+            Appointment[] appointmentsReference = referenceBook.getAppointments().toArray(new Appointment[0]);
+            for (Appointment i : appointmentsReference) {
+                if ((beginD.after(i.getBeginTime()) && beginD.before(i.getEndTime())) || beginD.equals(i.getBeginTime())) {
+                    newBook.addAppointment(i);
+                }
+            }
+            PrettyPrinter prettyPrinter = new PrettyPrinter(response.getWriter());
+            prettyPrinter.dump(newBook);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+
+
+
     }
 
 

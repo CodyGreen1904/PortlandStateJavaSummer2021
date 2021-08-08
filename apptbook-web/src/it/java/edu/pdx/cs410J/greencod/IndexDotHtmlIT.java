@@ -22,6 +22,7 @@ class IndexDotHtmlIT {
   }
 
   @Test
+
   void indexDotHtmlHasReasonableContent() throws IOException {
     Response indexDotHtml = fetchIndexDotHtml();
     assertThat(indexDotHtml.getContent(), containsString("<form"));

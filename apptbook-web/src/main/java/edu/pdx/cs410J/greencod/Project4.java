@@ -1,7 +1,6 @@
 package edu.pdx.cs410J.greencod;
 
 import edu.pdx.cs410J.ParserException;
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.*;
 import java.text.ParseException;
@@ -31,7 +30,6 @@ public class Project4 {
             "-search Appointments should be searched for\n" +
             "-print Prints a description of the new appointment\n" +
             "-README Prints a README for this project and exits\n";
-    public static final String MISSING_DESCRIPTION = "Missing Description";
     public static final String MISSING_BEGIN_DATE = "Missing begin date";
     public static final String MISSING_BEGIN_TIME = "Missing begin time";
     public static final String MISSING_END_DATE = "Missing end date";
@@ -40,9 +38,7 @@ public class Project4 {
     public static final String DATE_NOT_CORRECT = "Incorrect date: Please use mm/dd/yyyy";
     public static final String TOO_MANY_ARGUMENTS = "Too many command line arguments";
     public static final String UNKNOWN_COMMAND_LINE_ARGUMENT = "Unknown command line argument";
-    public static final String OWNERS_DONT_MATCH = "Owner name in file is different than owner provided";
     public static final String NO_OWNER_PROVIDED = "Somehow the program attempted to write an AppointmentBook with no owner to a file, file not created";
-    public static final String ERROR_PARSING_DATE = "Incorrect date format, use MM/dd/yyyy hh:mm a";
     public static final String MISSING_BEGIN_PERIOD = "Missing begin time period";
     public static final String MISSING_END_PERIOD = "Missing end time period";
     public static final String BEGIN_AFTER_END = "The appointment's start time must be before the appointment's end time";
@@ -59,7 +55,7 @@ public class Project4 {
      */
     public static StringBuilder sToSb(String date, String time, String period) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(date + " " + time + " " + period);
+        stringBuilder.append(date).append(" ").append(time).append(" ").append(period);
 
         return stringBuilder;
     }
@@ -258,8 +254,8 @@ public class Project4 {
         boolean hostFlag = false;
         boolean portFlag = false;
         boolean searchFlag = false;
-        Date beginD = null;
-        Date endD = null;
+        Date beginD;
+        Date endD;
 
         Project4 p = new Project4();
         for (String arg : args) {
@@ -292,7 +288,6 @@ public class Project4 {
                 }
                 if (arg.equals("-port")) {
                     portFlag = true;
-                    continue;
                 } else {
                     System.err.println(UNKNOWN_COMMAND_LINE_ARGUMENT);
                     System.err.println(USAGE_MESSAGE);
@@ -352,7 +347,7 @@ public class Project4 {
                 AppointmentBook book = client.getAppointments(owner);
                 PrettyPrinter pretty = new PrettyPrinter(new OutputStreamWriter(System.out));
                 pretty.dump(book);
-                System.out.println(String.format("Pretty Printed %s's AppointmentBook", owner));
+                System.out.printf("Pretty Printed %s's AppointmentBook", owner);
                 System.exit(0);
 
             }
@@ -375,58 +370,41 @@ public class Project4 {
             System.err.println(MISSING_END_PERIOD);
             System.exit(1);
         }
-        if (searchFlag) {
             StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
-            String b = dateString.toString();
-
             beginD = sDateFormatter(dateString);
             dateString = sToSb(endDate, endTime, endPeriod);
-            String e = dateString.toString();
             endD = sDateFormatter(dateString);
-
             if (beginD.compareTo(endD) >= 0) {
                 System.err.println(BEGIN_AFTER_END);
                 System.exit(1);
             }
+            String[] deetz = new String[]{beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+            if (searchFlag) {
 
-            String deetz[] = new String[]{beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
-            AppointmentBook referenceBook = client.getAppointments(owner);
-            Appointment[] appointmentsReference = referenceBook.getAppointments().toArray(new Appointment[0]);
-            AppointmentBook newBook = new AppointmentBook(owner);
-            for (Appointment i : appointmentsReference) {
-                if ((beginD.after(i.getBeginTime()) && beginD.before(i.getEndTime())) || beginD.equals(i.getBeginTime())) {
-                    newBook.addAppointment(i);
+                AppointmentBook referenceBook = client.getAppointments(owner);
+                Appointment[] appointmentsReference = referenceBook.getAppointments().toArray(new Appointment[0]);
+                AppointmentBook newBook = new AppointmentBook(owner);
+                for (Appointment i : appointmentsReference) {
+                    if ((beginD.after(i.getBeginTime()) && beginD.before(i.getEndTime())) || beginD.equals(i.getBeginTime())) {
+                        newBook.addAppointment(i);
+                    }
+                }
+                PrettyPrinter pretty = new PrettyPrinter(new OutputStreamWriter(System.out));
+                pretty.dump(newBook);
+                System.out.printf("Pretty Printed %s's AppointmentBook in the given times", owner);
+                System.exit(0);
+
+            } else {
+
+                Appointment appointment = new Appointment(owner, description, beginD, endD, deetz);
+                AppointmentBook book = new AppointmentBook(owner);
+                book.addAppointment(appointment);
+                client.createAppointment(owner, appointment);
+                if (printFlag) {
+                    System.out.println(book);
+                    System.out.println(appointment);
                 }
             }
-            PrettyPrinter pretty = new PrettyPrinter(new OutputStreamWriter(System.out));
-            pretty.dump(newBook);
-            System.out.println(String.format("Pretty Printed %s's AppointmentBook in the given times", owner));
-            System.exit(0);
-
-        } else {
-            StringBuilder dateString = sToSb(beginDate, beginTime, beginPeriod);
-            String b = dateString.toString();
-
-            beginD = sDateFormatter(dateString);
-            dateString = sToSb(endDate, endTime, endPeriod);
-            String e = dateString.toString();
-            endD = sDateFormatter(dateString);
-
-            if (beginD.compareTo(endD) >= 0) {
-                System.err.println(BEGIN_AFTER_END);
-                System.exit(1);
-            }
-
-            String deetz[] = new String[]{beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
-            Appointment appointment = new Appointment(owner, description, beginD, endD, deetz);
-            AppointmentBook book = new AppointmentBook(owner);
-            book.addAppointment(appointment);
-            client.createAppointment(owner, appointment);
-            if (printFlag) {
-                System.out.println(book);
-                System.out.println(appointment);
-            }
-        }
     }catch (IOException | ParserException ex ) {
             error("While contacting server: " + ex);
             System.exit(1);

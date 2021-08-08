@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class TextParser implements AppointmentBookParser<AppointmentBook> {
 
-    private BufferedReader r;
+    private final BufferedReader r;
 
     /**
      * Creates a new <code>TextParser</code>
@@ -86,7 +86,7 @@ public class TextParser implements AppointmentBookParser<AppointmentBook> {
                     Date bd = Project4.sDateFormatter(dateString);
                     dateString = Project4.sToSb(endDate, endTime, endPeriod);
                     Date ed = Project4.sDateFormatter(dateString);
-                    String deetz[] = new String[] {beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
+                    String[] deetz = new String[]{beginDate, beginTime, beginPeriod, endDate, endTime, endPeriod};
                     Appointment newAppointment = new Appointment(owner, description, bd, ed, deetz);
                     newAppointmentBook.addAppointment(newAppointment);
                 }
@@ -96,11 +96,8 @@ public class TextParser implements AppointmentBookParser<AppointmentBook> {
             }
             System.out.println("file contents good");
             return newAppointmentBook;
-        } catch (ParserException e) {
+        } catch (ParserException | IOException e) {
             System.err.println("Mistake in parser: " + e);
-            System.exit(1);
-        } catch (IOException p) {
-            System.err.println("Mistake in parser: " + p);
             System.exit(1);
         }
         return null;

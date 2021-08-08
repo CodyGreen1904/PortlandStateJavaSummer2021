@@ -111,4 +111,41 @@ class Project4IT extends InvokeMainTestCase {
         String out = result.getTextWrittenToStandardOut();
         assertThat(out, out, containsString(owner));
     }
+    @Test
+    void testUnknownArgsPrintsUnknownArgs(){
+        MainMethodResult result = invokeMain(Project4.class, "-host", HOSTNAME, "-port", PORT, "-print", "-Eliza", "Cody", "Head Transplant Consultation","07/21/1992", "11:00", "am", "07/21/1992", "11:11", "pm");
+        assertThat(result.getTextWrittenToStandardError(), CoreMatchers.containsString(Project4.UNKNOWN_COMMAND_LINE_ARGUMENT));
+        assertThat(result.getTextWrittenToStandardError(), CoreMatchers.containsString(Project4.USAGE_MESSAGE));
+        assertThat(result.getExitCode(), CoreMatchers.equalTo(1));
+    }
+    @Test
+    void testIfStartAfterEnd(){
+        MainMethodResult result = invokeMain(Project4.class, "-host", HOSTNAME, "-port", PORT, "-print", "Cody", "Head Transplant Consultation","12/31/3000", "11:00", "am", "07/21/1992", "11:11", "pm");
+        assertThat(result.getTextWrittenToStandardError(), CoreMatchers.containsString(Project4.BEGIN_AFTER_END));
+        assertThat(result.getExitCode(), CoreMatchers.equalTo(1));
+    }
+    @Test
+    void testBeginTimeInRange() {
+        MainMethodResult result = invokeMain(Project4.class, "-host", HOSTNAME, "-port", PORT, "Cody", "Head Transplant Consultation","07/21/3000", "11:99", "am", "07/21/1992", "11:11", "pm");
+        assertThat(result.getTextWrittenToStandardError(), CoreMatchers.containsString(Project4.TIME_NOT_CORRECT));
+        assertThat(result.getExitCode(), CoreMatchers.equalTo(1));
+    }
+    /**
+     * Tests that invoking the main method with an end time out of range issues error
+     */
+    @Test
+    void testEndTimeInRange() {
+        MainMethodResult result = invokeMain(Project4.class, "-host", HOSTNAME, "-port", PORT, "Cody", "Head Transplant Consultation","07/21/3000", "11:00", "am", "07/21/1992", "11:99", "pm");
+        assertThat(result.getTextWrittenToStandardError(), CoreMatchers.containsString(Project4.TIME_NOT_CORRECT));
+        assertThat(result.getExitCode(), CoreMatchers.equalTo(1));
+    }
+    /**
+     * Tests that invoking the main method with an end time using characters fails
+     */
+    @Test
+    void testTimeIsNumber() {
+        MainMethodResult result = invokeMain(Project4.class, "-host", HOSTNAME, "-port", PORT, "Cody", "Head Transplant Consultation","07/21/3000", "11:xx", "am", "07/21/1992", "11:99", "pm");
+        assertThat(result.getTextWrittenToStandardError(), CoreMatchers.containsString(Project4.TIME_NOT_CORRECT));
+        assertThat(result.getExitCode(), CoreMatchers.equalTo(1));
+    }
 }

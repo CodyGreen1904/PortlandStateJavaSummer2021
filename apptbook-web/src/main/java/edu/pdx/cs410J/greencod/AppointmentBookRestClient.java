@@ -5,7 +5,6 @@ import edu.pdx.cs410J.web.HttpRequestHelper;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -35,26 +34,13 @@ public class AppointmentBookRestClient extends HttpRequestHelper {
   }
 
   /**
-   * Returns all dictionary entries from the server
-   * @return
-   * returns dictionary entries]
-   * @throws IOException
-   *  throws IOException
-   *
-   */
-  public Map<String, String> getAllDictionaryEntries() throws IOException {
-    Response response = get(this.url, Map.of());
-    return Messages.parseDictionary(response.getContent());
-  }
-
-  /**
    * Returns the definition for the given owner
    * @param owner
    * owner of appointment book
    * @return
    * returns definition
-   * @throws
-   * IOException
+   * @throws IOException
+   * throws IOException
    */
   public AppointmentBook getAppointments(String owner) throws IOException, ParserException {
     Response response = get(this.url, Map.of("owner", owner));

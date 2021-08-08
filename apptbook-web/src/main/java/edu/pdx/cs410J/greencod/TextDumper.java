@@ -11,7 +11,7 @@ import java.io.Writer;
  */
 
 public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
-    private Writer w;
+    private final Writer w;
 
     /**
      * Creates a new <code>TextDumper</code>
@@ -27,6 +27,7 @@ public class TextDumper implements AppointmentBookDumper<AppointmentBook> {
      * @param b
      *      <code>AppointmentBook</code> being added
      * @throws IOException
+     * throws IOException
      */
     public void dump(AppointmentBook b) throws IOException {
         PrintWriter pw = new PrintWriter(this.w);
