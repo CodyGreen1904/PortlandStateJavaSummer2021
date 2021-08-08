@@ -9,4 +9,7 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="use_appointmentbook_app">Use AppointmentBook App</string>
+    <string name="help">Help</string>
+    <string name="welcome_to_the_android_appointmentbook_app">Welcome to The Android AppointmentBook App</string>
 </resources>

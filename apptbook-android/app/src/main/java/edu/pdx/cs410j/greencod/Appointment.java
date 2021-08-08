@@ -7,10 +7,10 @@ public class Appointment extends AbstractAppointment {
     private final String endTimeString;
     private final String beginTimestring;
 
-    public Appointment(String description, String endTimeString, String beginTimestring) {
+    public Appointment(String description, String beginTimeString, String endTimestring) {
         this.description = description;
-        this.endTimeString = endTimeString;
-        this.beginTimestring = beginTimestring;
+        this.endTimeString = endTimestring;
+        this.beginTimestring = beginTimeString;
     }
 
     @Override
