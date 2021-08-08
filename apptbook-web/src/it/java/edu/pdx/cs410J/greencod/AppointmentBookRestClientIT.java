@@ -28,12 +28,24 @@ class AppointmentBookRestClientIT {
     return new AppointmentBookRestClient(HOSTNAME, port);
   }
 
+  /**
+   * Tests that we can remove appt books
+   * @throws IOException
+   * throws IO exception
+   */
   @Test
   void test0RemoveAllAppointmentBooks() throws IOException {
     AppointmentBookRestClient client = newAppointmentBookRestClient();
     client.removeAllAppointmentBooks();
   }
 
+  /**
+   * Tests that we can create a new appointment book
+   * @throws IOException
+   * Throws IOexception
+   * @throws ParserException
+   * Throws Parser Exception
+   */
   @Test
   void test2CreateAppointmentBookWithOneAppointment() throws IOException, ParserException {
     AppointmentBookRestClient client = newAppointmentBookRestClient();
@@ -68,6 +80,11 @@ class AppointmentBookRestClientIT {
     assertThat(appointment.getDescription(), equalTo(description));
   }
 
+  /**
+   * Tests that missing paramaters returns proper code
+   * @throws IOException
+   * Throws IOexception
+   */
   @Test
   void test4MissingRequiredParameterReturnsPreconditionFailed() throws IOException {
     AppointmentBookRestClient client = newAppointmentBookRestClient();

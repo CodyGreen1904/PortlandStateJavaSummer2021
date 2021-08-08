@@ -152,6 +152,15 @@ public class AppointmentBookServlet extends HttpServlet
         response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, message);
     }
 
+    /**
+     * Outputs text of owner's appointment book to given output
+     * @param owner
+     * Name of apptbooks owner to print
+     * @param response
+     * Servlet response
+     * @throws IOException
+     * Throws IOException
+     */
     private void writeAppointmentBook(String owner, HttpServletResponse response) throws IOException {
         AppointmentBook book = this.books.get(owner);
 
@@ -166,6 +175,20 @@ public class AppointmentBookServlet extends HttpServlet
             response.setStatus(HttpServletResponse.SC_OK);
         }
     }
+
+    /**
+     * Searches given owner's appointment book and prints all appointments falling between given times
+     * @param owner
+     * Name of apptbook owner
+     * @param start
+     * Start time to compare
+     * @param end
+     * End time to compare
+     * @param response
+     * Servlet response
+     * @throws IOException
+     * Throws IOException
+     */
     private void searchAppointmentBook(String owner, String start, String end, HttpServletResponse response) throws IOException {
         AppointmentBook referenceBook = this.books.get(owner);
         if(referenceBook == null){
@@ -175,10 +198,11 @@ public class AppointmentBookServlet extends HttpServlet
         }
         else{
             Date beginD = sDateFormatter(new StringBuilder(start));
+            Date endD = sDateFormatter(new StringBuilder(end));
             AppointmentBook newBook = new AppointmentBook(owner);
             Appointment[] appointmentsReference = referenceBook.getAppointments().toArray(new Appointment[0]);
             for (Appointment i : appointmentsReference) {
-                if ((beginD.after(i.getBeginTime()) && beginD.before(i.getEndTime())) || beginD.equals(i.getBeginTime())) {
+                if ((i.getBeginTime().after(beginD) && (i.getBeginTime().before(endD)) || beginD.equals(i.getBeginTime()))) {
                     newBook.addAppointment(i);
                 }
             }
@@ -213,6 +237,13 @@ public class AppointmentBookServlet extends HttpServlet
         return this.books.get(owner);
     }
 
+    /**
+     * Creates appointment book and puts it into the servlet
+     * @param owner
+     * Name of owner of appointment book
+     * @return
+     * returns appointment book
+     */
     public AppointmentBook createAppointmentBook(String owner) {
         AppointmentBook book = new AppointmentBook(owner);
         this.books.put(owner, book);

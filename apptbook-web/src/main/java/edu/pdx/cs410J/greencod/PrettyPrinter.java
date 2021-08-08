@@ -23,7 +23,6 @@ public class PrettyPrinter implements AppointmentBookDumper<AppointmentBook> {
      * Prints a pretty print format to given file
      * @param b
      * AppointmentBook being written
-     * @return
      */
     public void dump(AppointmentBook b) throws IOException {
         if(b.getOwnerName() == null){

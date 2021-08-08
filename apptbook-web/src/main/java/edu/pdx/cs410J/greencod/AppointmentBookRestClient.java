@@ -44,12 +44,24 @@ public class AppointmentBookRestClient extends HttpRequestHelper {
    */
   public AppointmentBook getAppointments(String owner) throws IOException, ParserException {
     Response response = get(this.url, Map.of("owner", owner));
-    throwExceptionIfNotOkayHttpStatus(response);
+    if(response.getCode() != HTTP_OK){
+      System.err.println("Owner Doesnt Exist");
+      System.exit(1);
+    }
     String text = response.getContent();
     TextParser parser = new TextParser(new StringReader(text));
     return parser.parse();
   }
 
+  /**
+   * Creates an appointment and adds it to the servlet
+   * @param owner
+   * Owner of apptbook
+   * @param appointment
+   * Appt to add
+   * @throws IOException
+   * Throws IOException
+   */
   public void createAppointment(String owner, Appointment appointment) throws IOException {
 
     String beginAsString = formatDateForHttpRequest(appointment.getBeginTime());
@@ -58,6 +70,14 @@ public class AppointmentBookRestClient extends HttpRequestHelper {
     Response response = postToMyURL(Map.of("owner", owner, "description", appointment.getDescription(), "begin", beginAsString, "end", endAsString));
     throwExceptionIfNotOkayHttpStatus(response);
   }
+
+  /**
+   * Takes in a date and returns it in a format for an HTTP request
+   * @param time
+   * Date to convert
+   * @return
+   * Returns string for HTTP request
+   */
   private String formatDateForHttpRequest(Date time) {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
     return simpleDateFormat.format(time);
@@ -68,6 +88,11 @@ public class AppointmentBookRestClient extends HttpRequestHelper {
     return post(this.url, appointmentInfo);
   }
 
+  /**
+   * Deletes all apptbooks
+   * @throws IOException
+   * Throws IOExcpetion
+   */
   public void removeAllAppointmentBooks() throws IOException {
     Response response = delete(this.url, Map.of());
     throwExceptionIfNotOkayHttpStatus(response);

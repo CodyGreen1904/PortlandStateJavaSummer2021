@@ -3,6 +3,7 @@ package edu.pdx.cs410J.greencod;
 import edu.pdx.cs410J.ParserException;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -382,26 +383,25 @@ public class Project4 {
             if (searchFlag) {
 
                 AppointmentBook referenceBook = client.getAppointments(owner);
+
                 Appointment[] appointmentsReference = referenceBook.getAppointments().toArray(new Appointment[0]);
                 AppointmentBook newBook = new AppointmentBook(owner);
                 for (Appointment i : appointmentsReference) {
-                    if ((beginD.after(i.getBeginTime()) && beginD.before(i.getEndTime())) || beginD.equals(i.getBeginTime())) {
+                    if ((i.getBeginTime().after(beginD) && (i.getBeginTime().before(endD)) || beginD.equals(i.getBeginTime()))) {
                         newBook.addAppointment(i);
                     }
                 }
                 PrettyPrinter pretty = new PrettyPrinter(new OutputStreamWriter(System.out));
                 pretty.dump(newBook);
-                System.out.printf("Pretty Printed %s's AppointmentBook in the given times", owner);
+                System.out.println("Pretty Printed " + owner + "'s AppointmentBook in the given times");
                 System.exit(0);
 
             } else {
 
                 Appointment appointment = new Appointment(owner, description, beginD, endD, deetz);
-                AppointmentBook book = new AppointmentBook(owner);
-                book.addAppointment(appointment);
                 client.createAppointment(owner, appointment);
                 if (printFlag) {
-                    System.out.println(book);
+                    System.out.println(client.getAppointments(owner));
                     System.out.println(appointment);
                 }
             }
@@ -414,7 +414,12 @@ public class Project4 {
         System.exit(0);
     }
 
-    private static void error( String message )
+    /**
+     *  Shows error message
+     * @param message
+     * message shown
+     */
+    public static void error( String message )
     {
         PrintStream err = System.err;
         err.println("** " + message);
