@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Appointment Book</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -12,4 +12,15 @@
     <string name="use_appointmentbook_app">Use AppointmentBook App</string>
     <string name="help">Help</string>
     <string name="welcome_to_the_android_appointmentbook_app">Welcome to The Android AppointmentBook App</string>
+    <string name="make_appointment">Make Appointment</string>
+    <string name="view_appointments">View Appointments</string>
+    <string name="search_appointments">Search Appointments</string>
+    <string name="delete_appointments">Delete Appointments</string>
+    <string name="help_menu">Help Menu</string>
+    <string name="readMe">
+        Welcome to the AppointmentBook App! To use this app, use the back arrow on your Android Phone to go back to the main menu, Then push the Use AppointmentBook App button. There, you will see some options.
+        The first option is to make an appointment. Using this, the app will check if there is an appointmentbook already made for the given owner and add the appointment to that book. Otherwise, it creates a new book.
+        The next option is to view all appointments from a given owner. The next option is to search an for appointments between two given times from a gievn owner.
+        The final option is to delete an owners appointment book.
+    </string>
 </resources>

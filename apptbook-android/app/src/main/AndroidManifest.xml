@@ -4,11 +4,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/dave"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/dave"
         android:supportsRtl="true"
+
         android:theme="@style/Theme.MyApplication">
+        <activity android:name=".HelpMenu"></activity>
+        <activity android:name=".AppointmentBookMenu" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
