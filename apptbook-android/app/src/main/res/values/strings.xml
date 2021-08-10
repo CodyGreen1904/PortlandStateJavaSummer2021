@@ -23,4 +23,8 @@
         The next option is to view all appointments from a given owner. The next option is to search an for appointments between two given times from a gievn owner.
         The final option is to delete an owners appointment book.
     </string>
+    <string name="owner">Owner</string>
+    <string name="type_owner_name_here">type owner name here</string>
+    <string name="type_description_here">type description here</string>
+    <string name="description">Description</string>
 </resources>
