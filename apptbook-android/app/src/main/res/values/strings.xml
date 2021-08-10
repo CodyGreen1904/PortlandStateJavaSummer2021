@@ -27,4 +27,9 @@
     <string name="type_owner_name_here">type owner name here</string>
     <string name="type_description_here">type description here</string>
     <string name="description">Description</string>
+    <string name="start_date">Start Date</string>
+    <string name="enter_start_date">enter start date (mm/dd/yyyy hh/MM am/pm</string>
+    <string name="enter_end_date">enter end date (mm/dd/yyyy hh/MM am/pm</string>
+    <string name="end_date">End Date</string>
+    <string name="create_appointment">Create Appointment</string>
 </resources>
