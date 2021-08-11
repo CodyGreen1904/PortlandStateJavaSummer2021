@@ -1,5 +1,6 @@
 package edu.pdx.cs410j.greencod;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -30,6 +31,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AppointmentBookMenu.class);
+                startActivity(intent);
+            }
+        });
+        Button helpButton = findViewById(R.id.help);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HelpMenu.class);
                 startActivity(intent);
             }
         });

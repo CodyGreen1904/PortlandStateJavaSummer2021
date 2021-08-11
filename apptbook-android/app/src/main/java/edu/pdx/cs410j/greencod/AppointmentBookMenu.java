@@ -22,5 +22,13 @@ public class AppointmentBookMenu extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button viewAppointmentButton = findViewById(R.id.viewAppointments);
+        viewAppointmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AppointmentBookMenu.this, ViewAppointments.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewAppointments">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="308dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="55dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/view_appointments"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="#050505"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="193dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="109dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="109dp"
+        android:text="@string/type_the_owner_name"
+        android:textColor="#070707"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <EditText
+        android:id="@+id/ownerSearchInput"
+        android:layout_width="153dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="129dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="129dp"
+        android:hint="David"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <Button
+        android:id="@+id/submitViewAppointment"
+        android:layout_width="182dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="114dp"
+        android:layout_marginTop="172dp"
+        android:layout_marginEnd="115dp"
+        android:layout_marginBottom="293dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ownerSearchInput" />
+</androidx.constraintlayout.widget.ConstraintLayout>

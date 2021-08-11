@@ -11,12 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="293dp"
         android:fontFamily="sans-serif-black"
         android:text="@string/owner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="176dp"
+        android:layout_marginTop="148dp"
         android:layout_marginEnd="270dp"
         android:fontFamily="sans-serif-black"
         android:text="@string/description"
@@ -52,26 +52,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="133dp"
         android:ems="10"
         android:hint="@string/enter_end_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startDateLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/endDateLabel" />
 
     <TextView
         android:id="@+id/startDateLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="296dp"
+        android:layout_marginTop="264dp"
         android:layout_marginEnd="270dp"
         android:fontFamily="sans-serif-black"
         android:text="@string/start_date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.125"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,12 +80,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="428dp"
+        android:layout_marginTop="400dp"
         android:layout_marginEnd="270dp"
         android:fontFamily="sans-serif-black"
         android:text="@string/end_date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.062"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

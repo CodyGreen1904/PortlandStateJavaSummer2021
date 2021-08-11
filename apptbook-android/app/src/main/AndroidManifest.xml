@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/dave"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
-        <activity android:name=".MakeAppointment"></activity>
+        <activity android:name=".DisplayAppointments"></activity>
+        <activity android:name=".ViewAppointments" />
+        <activity android:name=".MakeAppointment" />
         <activity android:name=".HelpMenu" />
         <activity android:name=".AppointmentBookMenu" />
         <activity

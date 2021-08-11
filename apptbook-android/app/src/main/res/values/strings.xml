@@ -18,7 +18,7 @@
     <string name="delete_appointments">Delete Appointments</string>
     <string name="help_menu">Help Menu</string>
     <string name="readMe">
-        Welcome to the AppointmentBook App! To use this app, use the back arrow on your Android Phone to go back to the main menu, Then push the Use AppointmentBook App button. There, you will see some options.
+        Welcome to the AppointmentBook App! To use this app, use the back button to go back to the main menu, Then push the Use AppointmentBook App button. There, you will see some options.
         The first option is to make an appointment. Using this, the app will check if there is an appointmentbook already made for the given owner and add the appointment to that book. Otherwise, it creates a new book.
         The next option is to view all appointments from a given owner. The next option is to search an for appointments between two given times from a gievn owner.
         The final option is to delete an owners appointment book.
@@ -32,4 +32,6 @@
     <string name="enter_end_date">enter end date (mm/dd/yyyy hh/MM am/pm</string>
     <string name="end_date">End Date</string>
     <string name="create_appointment">Create Appointment</string>
+    <string name="type_the_owner_name">Type the Owner Name</string>
+    <string name="all_done">All Done</string>
 </resources>
