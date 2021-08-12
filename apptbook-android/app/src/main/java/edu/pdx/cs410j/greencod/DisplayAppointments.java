@@ -34,10 +34,6 @@ public class DisplayAppointments extends AppCompatActivity {
                 Toast toast = Toast.makeText(this, "Error Parsing File, new AppointmentBook created", Toast.LENGTH_LONG);
                 toast.show();
                 return;
-            }else if (!appointmentBook.getOwnerName().equals(owner)) {
-                Toast toast = Toast.makeText(this, "Error Parsing File, new AppointmentBook created", Toast.LENGTH_LONG);
-                toast.show();
-                return;
             }
         } catch(FileNotFoundException f){
             Toast toast = Toast.makeText(this, "Error Parsing File, new AppointmentBook created", Toast.LENGTH_LONG);

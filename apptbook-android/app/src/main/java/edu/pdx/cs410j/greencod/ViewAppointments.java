@@ -50,6 +50,7 @@ public class ViewAppointments extends AppCompatActivity {
         } else {
             Toast toast = Toast.makeText(this, "No FileOwner of that name", Toast.LENGTH_LONG);
             toast.show();
+            return;
         }
         Intent intent = new Intent(ViewAppointments.this, DisplayAppointments.class);
         Bundle b = new Bundle();

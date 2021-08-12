@@ -90,10 +90,16 @@ public class MakeAppointment extends AppCompatActivity {
             toast.show();
             return;
         }
-        Date start = sDateFormatter(startS.toString());
+        Date start = sDateFormatter(startS);
         Date end = sDateFormatter(endS);
 
-        String deetz[] = new String[] {startString[0], startString[1], startString[2], endString[0], endString[1], endString[2]};
+        if(start.compareTo(end) >= 0) {
+            Toast toast = Toast.makeText(this, "Start time after end time", Toast.LENGTH_LONG);
+            toast.show();
+            return;
+        }
+
+        String[] deetz = new String[] {startString[0], startString[1], startString[2], endString[0], endString[1], endString[2]};
 
         Appointment appointmentToAdd = new Appointment(owner, description, start, end, deetz);
         AppointmentBook appointmentBook = null;
@@ -133,9 +139,7 @@ public class MakeAppointment extends AppCompatActivity {
             toast.show();
             return;
         }
-        String fin = "Made Appointment: "
-                + appointmentToAdd.getDescription() + " from "
-                + appointmentToAdd.getBeginTimeString() + " to " + appointmentToAdd.getEndTimeString();
+        String fin = "Made Appointment: " + appointmentToAdd.toString();
         Toast toast = Toast.makeText(this, fin, Toast.LENGTH_LONG);
         toast.show();
         finish();
